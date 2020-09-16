@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="elfin5_manipulator">
+	<xacro:include filename="$(find samk_elfin)/urdf/elfin5.urdf.xacro" />
+	
+	<xacro:macro name="tool_cyl" params="name length radius weight parent">
+		<joint name="${name}_joint" type="fixed">
+			<origin xyz="0 0 0.06" rpy="0 0 0"/>
+			<parent link="${parent}" />
+			<child link="${name}_link" />
+		</joint>
+
+		<link name="${name}_link">
+			<inertial>
+				<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+				<mass value="${weight}"/>
+				<inertia ixx="${(weight*(3*radius**2 + length**2))/12}" ixy="0.0" ixz="0.0" 
+				iyy="${(weight*(3*radius**2 + length**2))/12}" iyz="0.0" 
+				izz="${(weight*radius**2)/2}"/>
+			</inertial>
+			<visual>
+				<origin xyz="0.0 0.0 0" rpy="0 0 0.0"/>
+				<material name="green" />
+				<geometry>
+					<cylinder radius="${radius}" length="${length}"/>
+				</geometry>
+			</visual>
+			<collision>
+				<origin xyz="0.0 0.0 0" rpy="0.0 0.0 0.0"/>
+				<geometry>
+					<cylinder radius="${radius}" length="${length}"/>
+				</geometry>
+			</collision>
+		</link>
+	</xacro:macro>
+
+	<xacro:tool_cyl name="cyl" length="0.1" radius="0.03" weight="0.1" parent="elfin_end_link" />
+
+</robot>
