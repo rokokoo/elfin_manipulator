@@ -1,0 +1,26 @@
+[submodule "src/elfin_robot"]
+	path = src/elfin_robot
+	url = https://github.com/isura/elfin_robot.git
+	branch = melodic-devel
+[submodule "src/soem"]
+	path = src/soem
+	url = https://github.com/mgruhler/soem.git
+	branch = melodic
+[submodule "src/ros_control"]
+	path = src/ros_control
+	url = https://github.com/ros-controls/ros_control.git
+	branch = melodic-devel
+[submodule "src/gazebo_ros_pkgs"]
+	path = src/gazebo_ros_pkgs
+	url = https://github.com/ros-simulation/gazebo_ros_pkgs.git
+	branch = melodic-devel
+[submodule "src/ros_controllers"]
+	path = src/ros_controllers
+	url = https://github.com/ros-controls/ros_controllers.git
+	branch = melodic-devel
+[submodule "src/four_wheel_steering_msgs"]
+	path = src/four_wheel_steering_msgs
+	url = https://github.com/ros-drivers/four_wheel_steering_msgs.git
+[submodule "src/urdf_geometry_parser"]
+	path = src/urdf_geometry_parser
+	url = https://github.com/ros-controls/urdf_geometry_parser.git
