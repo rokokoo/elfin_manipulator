@@ -24,3 +24,11 @@
 [submodule "src/urdf_geometry_parser"]
 	path = src/urdf_geometry_parser
 	url = https://github.com/ros-controls/urdf_geometry_parser.git
+[submodule "src/robotiq"]
+	path = src/robotiq
+	url = https://github.com/ros-industrial/robotiq.git
+	branch = kinetic-devel
+[submodule "src/ros_canopen"]
+	path = src/ros_canopen
+	url = https://github.com/ros-industrial/ros_canopen.git
+	branch = melodic-devel

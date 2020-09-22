@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="samk_3f_gripper">
+	<xacro:include filename="$(find elfin_description)/urdf/elfin5.urdf.xacro" />
+	<xacro:include filename="$(find robotiq_3f_gripper_visualization)/cfg/robotiq-3f-gripper_articulated_macro.xacro" />
+    <xacro:robotiq-3f-gripper_articulated prefix="robotiq_"/>
+
+	<joint name="tool_connector" type="fixed">
+		<origin xyz="0.0 0.0 0.0" rpy="1.5708 0.0 0.0"/>
+		<parent link="elfin_end_link" />
+		<child link="robotiq_palm" />
+	</joint>
+
+</robot>
