@@ -17,7 +17,7 @@ Yhdistä työkalu käsivarteen URDF määrityksellä:
 ```
 
 Tallenna kokoonpano nimellä samk_<työkalu>.urdf.xacro
-
+  
 Varmista toimivuus: `roslaunch samk_description display.launch model:=samk_<työkalu>`
 
 ## MoveIt! paketin teko

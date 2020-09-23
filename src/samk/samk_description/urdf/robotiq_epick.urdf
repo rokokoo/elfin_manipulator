@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot name="robotiq_epick">
+  <link name="robotiq_base_link">
+    <inertial>
+      <origin xyz="-1.272E-05 -5.0125E-08 -0.044797" rpy="0 0 0" />
+      <mass value="0.37395" />
+      <inertia ixx="0.00050773" ixy="-2.6668E-10" ixz="2.0492E-07" iyy="0.00040813" iyz="-9.9229E-10" izz="0.00025472" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://samk_description/meshes/robotiq_epick/base_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://samk_description/meshes/robotiq_epick/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="robotiq_vacuum_link">
+    <inertial>
+      <origin xyz="2.2597E-06 -3.0992E-08 0.021057" rpy="0 0 0" />
+      <mass value="0.1712" />
+      <inertia ixx="4.1922E-05" ixy="2.2135E-07" ixz="2.005E-09" iyy="0.000138" iyz="2.1463E-11" izz="0.00015364" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://samk_description/meshes/robotiq_epick/vacuum_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.86667 0.90588 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://samk_description/meshes/robotiq_epick/vacuum_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="vacuum_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="robotiq_base_link" />
+    <child link="robotiq_vacuum_link" />
+    <axis xyz="0 0 0" />
+  </joint>
+</robot>
