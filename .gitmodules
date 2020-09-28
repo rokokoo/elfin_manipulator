@@ -36,3 +36,15 @@
 	path = src/roboticsgroup_gazebo_plugins
 	url = https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git
 
+[submodule "src/moveit_grasps"]
+	path = src/moveit_grasps
+	url = https://github.com/ros-planning/moveit_grasps.git
+	branch = melodic-devel
+[submodule "src/moveit_visual_tools"]
+	path = src/moveit_visual_tools
+	url = https://github.com/ros-planning/moveit_visual_tools.git
+	branch = melodic-devel
+[submodule "src/rviz_visual_tools"]
+	path = src/rviz_visual_tools
+	url = https://github.com/PickNikRobotics/rviz_visual_tools.git
+	branch = melodic-devel
