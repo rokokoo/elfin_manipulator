@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="samk_2f_140_gripper">
-	<gazebo>
+	<!-- <gazebo>
 		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
 			<robotNamespace>/samk</robotNamespace>
 			<robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
 		</plugin>
-	</gazebo>
+	</gazebo> -->
 
 	<xacro:macro name="robotiq_arg2f_gazebo" params="prefix">
 		<gazebo>
