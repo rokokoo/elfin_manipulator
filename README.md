@@ -2,21 +2,28 @@
 
 ## Installation process
 
-### ROS packages
-
-```bash
+<!-- ```bash
 sudo apt install ros-melodic-soem \
 ros-melodic-moveit \
 ros-melodic-joint-trajectory-controller \
 ros-melodic-socketcan-interface
-```
+``` -->
 
 ### Github
+
 ```bash
 git clone --recurse-submodules https://github.com/rokokoo/elfin_manipulator.git
 ```
 
+### ROS packages
+
+```bash
+cd elfin_manipulator/src
+rosdep install --from-paths src --ignore-src --rosdistro=melodic -y
+```
+
 The submodules that are used:
+
 - [isura / elfin_robot](https://github.com/isura/elfin_robot/tree/melodic-devel), melodic-devel branch
 - [roboticsgroup / roboticsgroup_gazebo_plugins](https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git)
 - [ros-industrial / robotiq](https://github.com/ros-industrial/robotiq.git)
@@ -35,6 +42,6 @@ After everything loads, start MoveIt with Rviz on a new terminal.
 
 When the launch file finishes loading, you can start planning and executing movements.
 
-# TODO
+## TODO
 
 - Create a page, that contains information on how to make a new moveit config with a manipulator attached.
