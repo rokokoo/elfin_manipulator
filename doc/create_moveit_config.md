@@ -47,4 +47,4 @@ The manipulator will be a URDF sphere, since there are so many different options
 
 It should look something like this in RViz
 
-![Test URDF xacro]('doc/rviz_test_manipulator.png')
+![Test URDF xacro](img/rviz_test_manipulator.png)
