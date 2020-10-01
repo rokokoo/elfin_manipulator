@@ -1,4 +1,4 @@
-# Creating a MoveIt! config
+# Creating a MoveIt! config [SUPER WIP]
 
 ## The Xacro
 

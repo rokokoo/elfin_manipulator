@@ -42,6 +42,6 @@ After everything loads, start MoveIt with Rviz on a new terminal.
 
 When the launch file finishes loading, you can start planning and executing movements.
 
-## TODO
+## How to create a arm + manipulator combo
 
-- Create a page, that contains information on how to make a new moveit config with a manipulator attached.
+You can find a simple MoveIt tutorial [here](doc/create_moveit_config.md), that explains how to create a simple arm + manipulator pair, how to setup it to work with MoveIt trajectory and getting it to work in Gazebo.
