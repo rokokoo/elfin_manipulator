@@ -209,3 +209,131 @@ Pushing the `Generate package` button, creates the files and will prompt a warni
 ![MoveIt 18](img/moveit_setup_18.png)
 
 We can now exit the setup assistant.
+
+---
+
+# Modifying the moveit configuration
+
+We need to create two launch files and modify existing code to work in Gazebo and RViz.
+
+First, let's modify `ros_controllers.yaml` file, that is located in `elfin_manipulator/src/samk/samk_test/config` folder.
+
+Find this part
+
+```yaml
+controller_list:
+  []
+```
+
+and change it to this
+
+```yaml
+controller_list:
+  - name: elfin_arm_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - elfin_joint1
+      - elfin_joint2
+      - elfin_joint3
+      - elfin_joint4
+      - elfin_joint5
+      - elfin_joint6
+```
+
+This was the only modification we had to do. Next, we will create 2 launch files.
+
+First we create `start_gazebo.launch` file
+
+```xml
+<?xml version="1.0"?>
+<launch>
+  <arg name="paused" default="false"/>
+  <arg name="gazebo_gui" default="true"/>
+
+  <!-- startup simulated world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" default="worlds/empty.world"/>
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="gui" value="$(arg gazebo_gui)"/>
+    <arg name="verbose" value="false"/>
+  </include>
+
+  <!-- send robot urdf to param server -->
+  <param name="robot_description" command="$(find xacro)/xacro '$(find samk_description)/urdf/test.urdf.xacro'"/>
+
+  <!-- push robot_description to factory and spawn robot in gazebo at the origin, change x,y,z arguments to spawn in a different position -->
+  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model samk -x 0 -y 0 -z 0"
+    respawn="false" output="screen" />
+
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find samk_test)/config/ros_controllers.yaml" command="load"/>
+
+  <!-- Load the controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
+    args="
+    joint_state_controller
+    elfin_arm_controller
+    --timeout 20" />
+
+</launch>
+```
+
+Next file is `start_moveit.launch`
+
+```xml
+<launch>
+  <!-- By default, we are not in debug mode -->
+  <arg name="debug" default="false" />
+
+  <!--
+  By default, hide joint_state_publisher's GUI
+  MoveIt!'s "demo" mode replaces the real robot driver with the joint_state_publisher.
+  The latter one maintains and publishes the current joint configuration of the simulated robot.
+  It also provides a GUI to move the simulated robot around "manually".
+  This corresponds to moving around the real robot without the use of MoveIt.
+  -->
+  <arg name="use_gui" default="false" />
+  <!-- Load the URDF, SRDF and other .yaml configuration files on the param server -->
+  <include file="$(find samk_test)/launch/planning_context.launch">
+    <arg name="load_robot_description" value="false"/>
+  </include>
+
+  <!-- If needed, broadcast static tf for robot root -->
+  
+
+  <!-- We do not have a robot connected, so publish fake joint states -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <!-- <param name="use_gui" value="$(arg use_gui)" /> -->
+    <param name="use_gui" value="false" />
+    <!-- <rosparam param="source_list">[samk/joint_states]</rosparam> -->
+    <rosparam param="source_list">[joint_states]</rosparam>
+  </node>
+
+  <!-- Given the published joint states, publish tf for the robot links -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
+
+
+  <!-- Run the main MoveIt! executable without trajectory execution (we do not have controllers configured by default) -->
+  <include file="$(find samk_test)/launch/move_group.launch">
+    <arg name="allow_trajectory_execution" value="true"/>
+    <arg name="fake_execution" value="false"/>
+    <arg name="info" value="true"/>
+    <arg name="debug" value="$(arg debug)"/>
+  </include>  
+
+  <!-- Run Rviz and load the default config to see the state of the move_group node -->
+  <include file="$(find samk_test)/launch/moveit_rviz.launch">
+    <arg name="rviz_config" value="$(find samk_test)/launch/moveit.rviz"/>
+    <arg name="debug" value="$(arg debug)"/>
+  </include>
+</launch>
+```
+
+You can use these as templates, when you create new arms, but remember to edit `samk_test` into the package you have created.
+
+Launch order is
+
+1. `start_gazebo.launch` (wait untill everything is loaded)
+2. `start_moveit.launch`
