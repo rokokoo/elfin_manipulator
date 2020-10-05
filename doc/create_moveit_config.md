@@ -339,3 +339,9 @@ Launch order is
 2. `roslaunch samk_test start_moveit.launch`
 
 __REMEMBER__ to `catkin_make` and `source devel/setup.bash`
+
+---
+
+Huge thank you to Tahsincan Koses article for helping making this work.
+
+[Custom Manipulator Simulation in Gazebo and Motion Planning with MoveIt!](https://medium.com/@tahsincankose/custom-manipulator-simulation-in-gazebo-and-motion-planning-with-moveit-c017eef1ea90)
