@@ -19,7 +19,10 @@ git clone --recurse-submodules https://github.com/rokokoo/elfin_manipulator.git
 
 ```bash
 cd elfin_manipulator/src
+
 rosdep install --from-paths src --ignore-src --rosdistro=melodic -y
+
+sudo apt install ros-melodic-moveit-simple-controller-manager
 ```
 
 The submodules that are used:
