@@ -180,7 +180,7 @@ Click save and let's move to `ROS Control`
 
 ## Ros Controllers
 
-There is straight an option to `Auto add FollowJointsTrajectory controllers for each planning group`, but we will not be using it, since we want to use  `effort_controllers/JointTrajectoryController`.
+There is straight an option to `Auto add FollowJointsTrajectory controllers for each planning group`, but we will not be using it, since we want to use  `position_controllers/JointTrajectoryController`.
 
 ![MoveIt 14](img/moveit_setup_14.png)
 
@@ -335,5 +335,7 @@ You can use these as templates, when you create new arms, but remember to edit `
 
 Launch order is
 
-1. `start_gazebo.launch` (wait untill everything is loaded)
-2. `start_moveit.launch`
+1. `roslaunch samk_test start_gazebo.launch` (wait untill everything is loaded)
+2. `roslaunch samk_test start_moveit.launch`
+
+__REMEMBER__ to `catkin_make` and `source devel/setup.bash`
