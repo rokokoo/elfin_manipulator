@@ -1,4 +1,4 @@
-# Creating a MoveIt! config [SUPER WIP]
+# Creating a MoveIt! config
 
 ## System requirements
 
