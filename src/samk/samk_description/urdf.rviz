@@ -70,10 +70,48 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        elfin_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        elfin_dummy_gripper:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         elfin_end_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        elfin_link1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        elfin_link2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        elfin_link3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        elfin_link4:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        elfin_link5:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        elfin_link6:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         robotiq_left_inner_finger:
           Alpha: 1
           Show Axes: false
@@ -129,6 +167,10 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        world:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
@@ -136,61 +178,19 @@ Visualization Manager:
       Value: true
       Visual Enabled: true
     - Class: rviz/TF
-      Enabled: true
+      Enabled: false
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        elfin_base:
-          Value: true
-        elfin_end_link:
-          Value: true
-        robotiq_left_inner_finger:
-          Value: false
-        robotiq_left_inner_finger_pad:
-          Value: false
-        robotiq_left_inner_knuckle:
-          Value: false
-        robotiq_left_outer_finger:
-          Value: false
-        robotiq_left_outer_knuckle:
-          Value: false
-        robotiq_right_inner_finger:
-          Value: false
-        robotiq_right_inner_finger_pad:
-          Value: false
-        robotiq_right_inner_knuckle:
-          Value: false
-        robotiq_right_outer_finger:
-          Value: false
-        robotiq_right_outer_knuckle:
-          Value: false
-        robotiq_robotiq_arg2f_base_link:
-          Value: false
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        elfin_base:
-          elfin_end_link:
-            robotiq_robotiq_arg2f_base_link:
-              robotiq_left_inner_knuckle:
-                {}
-              robotiq_left_outer_knuckle:
-                robotiq_left_outer_finger:
-                  robotiq_left_inner_finger:
-                    robotiq_left_inner_finger_pad:
-                      {}
-              robotiq_right_inner_knuckle:
-                {}
-              robotiq_right_outer_knuckle:
-                robotiq_right_outer_finger:
-                  robotiq_right_inner_finger:
-                    robotiq_right_inner_finger_pad:
-                      {}
+        {}
       Update Interval: 0
-      Value: true
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 46; 52; 54
@@ -219,7 +219,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.9662692546844482
+      Distance: 1.5226788520812988
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -234,10 +234,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.41540035605430603
+      Pitch: 0.2904004752635956
       Target Frame: elfin_end_link
       Value: Orbit (rviz)
-      Yaw: 2.771754264831543
+      Yaw: 1.761753797531128
     Saved: ~
 Window Geometry:
   Displays:

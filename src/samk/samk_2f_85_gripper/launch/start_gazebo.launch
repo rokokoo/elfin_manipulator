@@ -12,14 +12,14 @@
   </include>
 
   <!-- send robot urdf to param server -->
-  <param name="robot_description" command="$(find xacro)/xacro '$(find samk_description)/urdf/samk_2f_140.urdf.xacro'"/>
+  <param name="robot_description" command="$(find xacro)/xacro '$(find samk_description)/urdf/samk_2f_85.urdf.xacro'"/>
 
   <!-- push robot_description to factory and spawn robot in gazebo at the origin, change x,y,z arguments to spawn in a different position -->
   <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model samk -x 0 -y 0 -z 0"
     respawn="false" output="screen" />
 
   <!-- Load joint controller configurations from YAML file to parameter server -->
-  <rosparam file="$(find samk_2f_140_gripper)/config/ros_controllers.yaml" command="load"/>
+  <rosparam file="$(find samk_2f_85_gripper)/config/ros_controllers.yaml" command="load"/>
 
   <!-- Load the controllers -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
