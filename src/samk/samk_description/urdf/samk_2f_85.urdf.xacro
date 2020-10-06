@@ -1,31 +1,30 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="samk_2f_140_gripper">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="samk_2f_85_gripper">
 
 	<xacro:macro name="robotiq_arg2f_gazebo" params="prefix">
 		<gazebo>
 			<!-- loading plugin: mimic joints works in gazebo now-->
-			<plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_140_4">
+			<plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_85_4">
 				<joint>${prefix}finger_joint</joint>
 				<mimicJoint>${prefix}right_outer_knuckle_joint</mimicJoint>
 				<multiplier>-1.0</multiplier>
 			</plugin>
-			<plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_140_2">
+			<plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_85_2">
 				<joint>${prefix}finger_joint</joint>
 				<mimicJoint>${prefix}left_inner_finger_joint</mimicJoint>
 				<multiplier>1.0</multiplier>
-				<!--<offset>0.0</offset>-->
 			</plugin>
-			<plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_140_1">
+			<plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_85_1">
 				<joint>${prefix}finger_joint</joint>
 				<mimicJoint>${prefix}right_inner_finger_joint</mimicJoint>
 				<multiplier>1.0</multiplier>
 			</plugin>
-			<plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_140_3">
+			<plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_85_3">
 				<joint>${prefix}finger_joint</joint>
 				<mimicJoint>${prefix}left_inner_knuckle_joint</mimicJoint>
 				<multiplier>-1.0</multiplier>
 			</plugin>
-			<plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_140_5">
+			<plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_85_5">
 				<joint>${prefix}finger_joint</joint>
 				<mimicJoint>${prefix}right_inner_knuckle_joint</mimicJoint>
 				<multiplier>-1.0</multiplier>
@@ -33,10 +32,17 @@
 		</gazebo>
 	</xacro:macro>
 
+	<!-- ELFIN ROBOT -->
+
 	<xacro:include filename="$(find elfin_description)/urdf/elfin5.urdf.xacro" />
-	<xacro:include filename="$(find robotiq_2f_140_gripper_visualization)/urdf/robotiq_arg2f_140_model_macro.xacro" />
-	<xacro:robotiq_arg2f_140 prefix="robotiq_"/>
+
+	<!-- ROBOTIQ GRIPPER-->
+
+	<xacro:include filename="$(find robotiq_2f_85_gripper_visualization)/urdf/robotiq_arg2f_85_model_macro.xacro" />
+	<xacro:robotiq_arg2f_85 prefix="robotiq_"/>
 	<xacro:robotiq_arg2f_gazebo prefix="robotiq_" />
+
+	<!-- TOOL CONNECTOR -->
 
 	<joint name="tool_connector" type="fixed">
 		<origin xyz="0.0 0.0 0.0" rpy="0 0.0 0.0"/>
