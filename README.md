@@ -37,11 +37,11 @@ Build the package using `catkin_make`
 
 Run start_gazebo.launch first
 
-`roslaunch samk_2f_140_gripper start_gazebo.launch`
+`user@ubuntu:~/elfin_manipulator$ roslaunch samk_2f_140_gripper start_gazebo.launch`
 
 After everything loads, start MoveIt with Rviz on a new terminal.
 
-`roslaunch samk_2f_140_gripper start_moveit.launch`
+`user@ubuntu:~/elfin_manipulator$ roslaunch samk_2f_140_gripper start_moveit.launch`
 
 When the launch file finishes loading, you can start planning and executing movements.
 
