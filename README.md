@@ -12,17 +12,17 @@ ros-melodic-socketcan-interface
 ### Github
 
 ```bash
-git clone --recurse-submodules https://github.com/rokokoo/elfin_manipulator.git
+user@ubuntu:~$ git clone --recurse-submodules https://github.com/rokokoo/elfin_manipulator.git
 ```
 
 ### ROS packages
 
 ```bash
-cd elfin_manipulator/src
+user@ubuntu:~$ cd elfin_manipulator
 
-rosdep install --from-paths src --ignore-src --rosdistro=melodic -y
+user@ubuntu:~/elfin_manipulator$ rosdep install --from-paths src --ignore-src --rosdistro=melodic -y
 
-sudo apt install ros-melodic-moveit-simple-controller-manager
+user@ubuntu:~/elfin_manipulator$ sudo apt install ros-melodic-moveit-simple-controller-manager
 ```
 
 The submodules that are used:
