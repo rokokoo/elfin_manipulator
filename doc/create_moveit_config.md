@@ -52,9 +52,11 @@ The manipulator will be a URDF sphere, since there are so many different options
 </robot>
 ```
 
-Save the file as `test.urdf.xacro`
+Save the file into `elfin_manipulator/src/samk/samk_description/urdf`, filename as `test.urdf.xacro`
 
-It should look something like this in RViz, using the command `roslaunch samk_description display.launch model:=test`
+It should look something like this in RViz, using the command 
+
+`user@ubuntu:~/elfin_manipulator$ roslaunch samk_description display.launch model:=test`
 
 ![Test URDF xacro](img/rviz_test_manipulator.png)
 
@@ -335,8 +337,8 @@ You can use these as templates, when you create new arms, but remember to edit `
 
 Launch order is
 
-1. `roslaunch samk_test start_gazebo.launch` (wait untill everything is loaded)
-2. `roslaunch samk_test start_moveit.launch`
+1. `user@ubuntu:~/elfin_manipulator$ roslaunch samk_test start_gazebo.launch` (wait untill everything is loaded)
+2. `user@ubuntu:~/elfin_manipulator$ roslaunch samk_test start_moveit.launch`
 
 __REMEMBER__ to `catkin_make` and `source devel/setup.bash`
 
