@@ -29,7 +29,7 @@ The submodules that are used:
 
 - [isura / elfin_robot](https://github.com/isura/elfin_robot/tree/melodic-devel), melodic-devel branch
 - [roboticsgroup / roboticsgroup_gazebo_plugins](https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git)
-- [ros-industrial / robotiq](https://github.com/ros-industrial/robotiq.git)
+- [rokokoo / robotiq](https://github.com/rokokoo/robotiq), this is a fork from ros-industrial, because we had to change some parameters of the gripper geometry.
 
 Build the package using `catkin_make`
 
