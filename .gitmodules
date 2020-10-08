@@ -4,7 +4,7 @@
 	branch = melodic-devel
 [submodule "src/robotiq"]
 	path = src/robotiq
-	url = https://github.com/ros-industrial/robotiq.git
+	url = https://github.com/rokokoo/robotiq.git
 	branch = kinetic-devel
 [submodule "src/roboticsgroup_gazebo_plugins"]
 	path = src/roboticsgroup_gazebo_plugins
