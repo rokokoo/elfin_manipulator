@@ -12,6 +12,8 @@ ros-melodic-socketcan-interface
 ### Github
 
 ```bash
+user@ubuntu:~$ mkdir -p catkin_ws/src
+user@ubuntu:~$ cd catkin_ws/src
 user@ubuntu:~/catkin_ws/src$ git clone --recurse-submodules https://github.com/rokokoo/elfin_manipulator.git
 ```
 
