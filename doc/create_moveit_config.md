@@ -52,11 +52,11 @@ The manipulator will be a URDF sphere, since there are so many different options
 </robot>
 ```
 
-Save the file into `elfin_manipulator/src/samk/samk_description/urdf`, filename as `test.urdf.xacro`
+Save the file into `src/elfin_manipulator/samk/samk_description/urdf`, filename as `test.urdf.xacro`
 
 It should look something like this in RViz, using the command 
 
-`user@ubuntu:~/elfin_manipulator$ roslaunch samk_description display.launch model:=test`
+`user@ubuntu:~/catkin_ws$ roslaunch samk_description display.launch model:=test`
 
 ![Test URDF xacro](img/rviz_test_manipulator.png)
 
@@ -218,7 +218,7 @@ We can now exit the setup assistant.
 
 We need to create two launch files and modify existing code to work in Gazebo and RViz.
 
-First, let's modify `ros_controllers.yaml` file, that is located in `elfin_manipulator/src/samk/samk_test/config` folder.
+First, let's modify `ros_controllers.yaml` file, that is located in `src/elfin_manipulator/samk/samk_test/config` folder.
 
 Find this part
 
@@ -337,8 +337,8 @@ You can use these as templates, when you create new arms, but remember to edit `
 
 Launch order is
 
-1. `user@ubuntu:~/elfin_manipulator$ roslaunch samk_test start_gazebo.launch` (wait untill everything is loaded)
-2. `user@ubuntu:~/elfin_manipulator$ roslaunch samk_test start_moveit.launch`
+1. `user@ubuntu:~/catkin_ws/$ roslaunch samk_test start_gazebo.launch` (wait untill everything is loaded)
+2. `user@ubuntu:~/catkin_ws/$ roslaunch samk_test start_moveit.launch`
 
 __REMEMBER__ to `catkin_make` and `source devel/setup.bash`
 

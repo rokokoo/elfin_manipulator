@@ -12,17 +12,17 @@ ros-melodic-socketcan-interface
 ### Github
 
 ```bash
-user@ubuntu:~$ git clone --recurse-submodules https://github.com/rokokoo/elfin_manipulator.git
+user@ubuntu:~/catkin_ws/src$ git clone --recurse-submodules https://github.com/rokokoo/elfin_manipulator.git
 ```
 
 ### ROS packages
 
 ```bash
-user@ubuntu:~$ cd elfin_manipulator
+user@ubuntu:~/catkin_ws/src$ cd elfin_manipulator
 
-user@ubuntu:~/elfin_manipulator$ rosdep install --from-paths src --ignore-src --rosdistro=melodic -y
+user@ubuntu:~/catkin_ws/src/elfin_manipulator$ rosdep install --from-paths src --ignore-src --rosdistro=melodic -y
 
-user@ubuntu:~/elfin_manipulator$ sudo apt install ros-melodic-moveit-simple-controller-manager
+user@ubuntu:~/catkin_ws/src/elfin_manipulator$ sudo apt install ros-melodic-moveit-simple-controller-manager
 ```
 
 The submodules that are used:
@@ -37,11 +37,11 @@ Build the package using `catkin_make`
 
 Run start_gazebo.launch first
 
-`user@ubuntu:~/elfin_manipulator$ roslaunch samk_2f_140_gripper start_gazebo.launch`
+`user@ubuntu:~/catkin_ws/$ roslaunch samk_2f_140_gripper start_gazebo.launch`
 
 After everything loads, start MoveIt with Rviz on a new terminal.
 
-`user@ubuntu:~/elfin_manipulator$ roslaunch samk_2f_140_gripper start_moveit.launch`
+`user@ubuntu:~/catkin_ws/$ roslaunch samk_2f_140_gripper start_moveit.launch`
 
 When the launch file finishes loading, you can start planning and executing movements.
 
