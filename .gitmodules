@@ -1,11 +1,11 @@
-[submodule "src/elfin_robot"]
-	path = src/elfin_robot
+[submodule "elfin_robot"]
+	path = elfin_robot
 	url = https://github.com/isura/elfin_robot.git
 	branch = melodic-devel
-[submodule "src/robotiq"]
-	path = src/robotiq
+[submodule "robotiq"]
+	path = robotiq
 	url = https://github.com/rokokoo/robotiq.git
 	branch = kinetic-devel
-[submodule "src/roboticsgroup_gazebo_plugins"]
-	path = src/roboticsgroup_gazebo_plugins
+[submodule "roboticsgroup_gazebo_plugins"]
+	path = roboticsgroup_gazebo_plugins
 	url = https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git
