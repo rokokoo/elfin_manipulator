@@ -88,3 +88,5 @@ CATKIN_IGNORE
 
 .catkin_tools
 *.xcf
+.markdownlint.yaml
+.catkin_workspace
