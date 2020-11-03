@@ -20,11 +20,9 @@ user@ubuntu:~/catkin_ws/src$ git clone --recurse-submodules https://github.com/r
 ### ROS packages
 
 ```bash
-user@ubuntu:~/catkin_ws/src$ cd elfin_manipulator
+user@ubuntu:~/catkin_ws$ rosdep install --from-paths src --ignore-src --rosdistro=melodic -y
 
-user@ubuntu:~/catkin_ws/src/elfin_manipulator$ rosdep install --from-paths src --ignore-src --rosdistro=melodic -y
-
-user@ubuntu:~/catkin_ws/src/elfin_manipulator$ sudo apt install ros-melodic-moveit-simple-controller-manager
+user@ubuntu:~/catkin_ws$ sudo apt install ros-melodic-moveit-simple-controller-manager
 ```
 
 The submodules that are used:
