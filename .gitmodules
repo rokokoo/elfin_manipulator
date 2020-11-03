@@ -1,7 +1,7 @@
 
 [submodule "elfin_robot"]
 	path = elfin_robot
-	url = https://github.com/isura/elfin_robot.git
+	url = https://github.com/rokokoo/elfin_robot.git
 	branch = melodic-devel
 [submodule "robotiq"]
 	path = robotiq
