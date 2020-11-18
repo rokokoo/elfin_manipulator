@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="samk_schunk_gripper">
+	<!-- ELFIN ROBOT -->
+	<xacro:include filename="$(find elfin_description)/urdf/elfin5.urdf.xacro" />
+
+	<!-- ONROBOT QUICK CHANGER -->
+
+	<joint name="onrobot_qc_joint" type="fixed">
+		<origin xyz="0.0 0.0 0.007" rpy="3.14 0.0 0"/>
+		<parent link="elfin_end_link" />
+		<child link="onrobot_qc" />
+	</joint>
+
+	<link name="onrobot_qc">
+		<inertial>
+			<origin xyz="-5.1179E-05 0.0031066 -0.011844" rpy="0 0 0" />
+			<mass value="0.041881" />
+			<inertia ixx="1.4766E-05" ixy="6.9336E-08" ixz="6.4489E-09" iyy="1.4084E-05" iyz="-7.1034E-08" izz="2.7935E-05" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://samk_description/meshes/onrobot_qc.stl" />
+			</geometry>
+			<material name="">
+				<color rgba="0.75294 0.75294 0.75294 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://samk_description/meshes/onrobot_qc.stl" />
+			</geometry>
+		</collision>
+	</link>
+
+	
+
+	<!-- SCHUNK GRIPPER-->
+
+	<joint name="schunk_gripper_joint" type="fixed">
+		<origin xyz="0.0 0.0 -0.022" rpy="3.14 0.0 -0.392699082"/>
+		<parent link="onrobot_qc" />
+		<child link="schunk_gripper" />
+	</joint>
+
+	<link name="schunk_gripper">
+		<inertial>
+			<origin xyz="-0.0046625 -6.506E-07 0.038473" rpy="0 0 0" />
+			<mass value="0.056479" />
+			<inertia ixx="4.105E-05" ixy="8.8372E-11" ixz="7.3368E-06" iyy="4.0981E-05" iyz="2.4436E-11" izz="1.995E-05" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://samk_description/meshes/schunk_with_fingers.stl" />
+			</geometry>
+			<material name="">
+				<color rgba="0.79216 0.81961 0.93333 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://samk_description/meshes/schunk_with_fingers.stl" />
+			</geometry>
+		</collision>
+	</link>
+
+	
+
+</robot>
