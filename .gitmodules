@@ -9,3 +9,13 @@
 [submodule "roboticsgroup_gazebo_plugins"]
 	path = roboticsgroup_gazebo_plugins
 	url = https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git
+[submodule "moveit_calibration"]
+	path = moveit_calibration
+	url = https://github.com/ros-planning/moveit_calibration.git
+[submodule "rviz_visual_tools"]
+	path = rviz_visual_tools
+	url = https://github.com/PickNikRobotics/rviz_visual_tools.git
+[submodule "realsense-ros"]
+	path = realsense-ros
+	url = https://github.com/IntelRealSense/realsense-ros.git
+

@@ -22,7 +22,7 @@ joint_state_controller:
   type: joint_state_controller/JointStateController
   publish_rate: 50
 controller_list:
-  - name: arm_controller
+  - name: elfin_arm_controller
     action_ns: follow_joint_trajectory
     type: FollowJointTrajectory
     default: true
@@ -33,7 +33,7 @@ controller_list:
       - elfin_joint4
       - elfin_joint5
       - elfin_joint6
-arm_controller:
+elfin_arm_controller:
   type: position_controllers/JointTrajectoryController
   joints:
     - elfin_joint1
