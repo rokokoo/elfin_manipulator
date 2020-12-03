@@ -1,72 +1,262 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="samk_schunk_gripper">
-	<!-- ELFIN ROBOT -->
-	<xacro:include filename="$(find elfin_description)/urdf/elfin5.urdf.xacro" />
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="samk_schunk_fingers">
+  <!-- ELFIN ROBOT -->
+  <xacro:include filename="$(find elfin_description)/urdf/elfin5.urdf.xacro" />
 
-	<!-- ONROBOT QUICK CHANGER -->
+  <!-- SCHUNK GRIPPER-->
+  <joint name="schunk_gripper_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.007" rpy="0 0 0"/>
+    <parent link="elfin_end_link" />
+    <child link="schunk_gripper" />
+  </joint>
 
-	<joint name="onrobot_qc_joint" type="fixed">
-		<origin xyz="0.0 0.0 0.007" rpy="3.14 0.0 0"/>
-		<parent link="elfin_end_link" />
-		<child link="onrobot_qc" />
-	</joint>
+  <link name="schunk_gripper">
+    <inertial>
+      <origin xyz="-0.0051568 7.4151E-07 0.031206" rpy="0 0 0" />
+      <mass value="0.051066" />
+      <inertia ixx="4.0388E-05" ixy="1.4949E-13" ixz="7.3368E-06" iyy="4.0519E-05" iyz="-2.4436E-11" izz="1.931E-05" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://samk_description/meshes/schunk_body.STL" />
+      </geometry>
+      <material name="green">
+        <color rgba="0 1 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://samk_description/meshes/schunk_body.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="finger1_link">
+    <inertial>
+      <origin xyz="-0.023225 5.9707E-05 0.11438" rpy="0 0 0" />
+      <mass value="0.0026753" />
+      <inertia ixx="3.6565E-07" ixy="-4.4111E-11" ixz="1.5685E-08" iyy="2.7762E-07" iyz="4.1902E-11" izz="9.9939E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://samk_description/meshes/finger1_link.STL" />
+      </geometry>
+      <material name="white">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://samk_description/meshes/finger1_link.STL" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint name="finger1_joint" type="prismatic">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="schunk_gripper" />
+    <child link="finger1_link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.006" upper="0.006" effort="25" velocity="0.2" />
+  </joint>
 
-	<link name="onrobot_qc">
-		<inertial>
-			<origin xyz="-5.1179E-05 0.0031066 -0.011844" rpy="0 0 0" />
-			<mass value="0.041881" />
-			<inertia ixx="1.4766E-05" ixy="6.9336E-08" ixz="6.4489E-09" iyy="1.4084E-05" iyz="-7.1034E-08" izz="2.7935E-05" />
-		</inertial>
-		<visual>
-			<origin xyz="0 0 0" rpy="0 0 0" />
-			<geometry>
-				<mesh filename="package://samk_description/meshes/onrobot_qc.stl" />
-			</geometry>
-			<material name="">
-				<color rgba="0.75294 0.75294 0.75294 1" />
-			</material>
-		</visual>
-		<collision>
-			<origin xyz="0 0 0" rpy="0 0 0" />
-			<geometry>
-				<mesh filename="package://samk_description/meshes/onrobot_qc.stl" />
-			</geometry>
-		</collision>
-	</link>
+  <link name="finger2_link">
+    <inertial>
+      <origin xyz="0.023224 -5.9836E-05 0.11438" rpy="0 0 0" />
+      <mass value="0.0026753" />
+      <inertia ixx="3.6565E-07" ixy="-4.4111E-11" ixz="-1.5685E-08" iyy="2.7762E-07" iyz="-4.1902E-11" izz="9.9941E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://samk_description/meshes/finger2_link.STL" />
+      </geometry>
+      <material name="pink">
+        <color rgba="1 0 1 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://samk_description/meshes/finger2_link.STL" />
+      </geometry>
+    </collision> -->
+  </link>
 
-	
+  <joint name="finger2_joint" type="prismatic">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="schunk_gripper" />
+    <child link="finger2_link" />
+    <axis xyz="0 1 0 " />
+    <limit lower="-0.006" upper="0.006" effort="25" velocity="0.2" />
+    <mimic joint="finger1_joint" multiplier="-1" offset="0" />
+  </joint>
 
-	<!-- SCHUNK GRIPPER-->
+  <transmission name="finger1_joint_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="finger1_joint">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="finger1_joint_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
 
-	<joint name="schunk_gripper_joint" type="fixed">
-		<origin xyz="0.0 0.0 -0.022" rpy="3.14 0.0 -0.392699082"/>
-		<parent link="onrobot_qc" />
-		<child link="schunk_gripper" />
-	</joint>
+  <transmission name="finger2_joint_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="finger2_joint">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="finger2_joint_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
 
-	<link name="schunk_gripper">
-		<inertial>
-			<origin xyz="-0.0046625 -6.506E-07 0.038473" rpy="0 0 0" />
-			<mass value="0.056479" />
-			<inertia ixx="4.105E-05" ixy="8.8372E-11" ixz="7.3368E-06" iyy="4.0981E-05" iyz="2.4436E-11" izz="1.995E-05" />
-		</inertial>
-		<visual>
-			<origin xyz="0 0 0" rpy="0 0 0" />
-			<geometry>
-				<mesh filename="package://samk_description/meshes/schunk_with_fingers.stl" />
-			</geometry>
-			<material name="">
-				<color rgba="0.79216 0.81961 0.93333 1" />
-			</material>
-		</visual>
-		<collision>
-			<origin xyz="0 0 0" rpy="0 0 0" />
-			<geometry>
-				<mesh filename="package://samk_description/meshes/schunk_with_fingers.stl" />
-			</geometry>
-		</collision>
-	</link>
+  <gazebo>
+    <plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="mimic_joints">
+      <joint>finger2_joint</joint>
+      <mimicJoint>finger1_joint</mimicJoint>
+      <multiplier>1.0</multiplier>
+    </plugin>
+  </gazebo>
 
-	
+  <!-- Realsense -->
+  <xacro:arg name="use_nominal_extrinsics" default="false" />
+  <xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro"/>
 
+  <xacro:sensor_d435i parent="schunk_gripper" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
+    <!-- <origin xyz="0.06643 0 0.0195" rpy="0 ${-pi/2} 0"/> -->
+    <!-- <origin xyz="0.07648 0 0.0195" rpy="0 ${-pi/2} ${pi}"/> -->
+    <origin xyz="0.05 0 0.0195" rpy="0 ${-pi/2} ${pi}"/>
+  </xacro:sensor_d435i>
+
+  <gazebo reference="camera_link">
+    <self_collide>0</self_collide>
+    <enable_wind>0</enable_wind>
+    <kinematic>0</kinematic>
+    <gravity>1</gravity>
+    <!--<mu>1</mu>-->
+    <mu2>1</mu2>
+    <fdir1>0 0 0</fdir1>
+    <!--<slip1>0</slip1>
+      <slip2>0</slip2>-->
+    <kp>1e+13</kp>
+    <kd>1</kd>
+    <!-- <max_vel>0.01</max_vel> -->
+    <!-- <min_depth>0</min_depth> -->
+    <sensor name="color" type="camera">
+      <camera name="realsense">
+        <horizontal_fov>1.211259</horizontal_fov>
+        <image>
+          <width>1920</width>
+          <height>1080</height>
+          <format>RGB_INT8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>100</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <always_on>1</always_on>
+      <update_rate>30</update_rate>
+      <visualize>0</visualize>
+    </sensor>
+    <sensor name="ired1" type="camera">
+      <camera name="realsense">
+        <horizontal_fov>1.487021</horizontal_fov>
+        <image>
+          <width>1280</width>
+          <height>720</height>
+          <format>L_INT8</format>
+        </image>
+        <!-- <clip>
+          <near>0.1</near>
+          <far>100</far>
+        </clip> -->
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.05</stddev>
+        </noise>
+      </camera>
+      <always_on>1</always_on>
+      <update_rate>90</update_rate>
+      <visualize>0</visualize>
+    </sensor>
+    <sensor name="ired2" type="camera">
+      <camera name="realsense">
+        <horizontal_fov>1.487021</horizontal_fov>
+        <image>
+          <width>1280</width>
+          <height>720</height>
+          <format>L_INT8</format>
+        </image>
+        <!-- <clip>
+          <near>0.1</near>
+          <far>100</far>
+        </clip> -->
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.05</stddev>
+        </noise>
+      </camera>
+      <always_on>1</always_on>
+      <update_rate>90</update_rate>
+      <visualize>0</visualize>
+    </sensor>
+    <sensor name="depth" type="depth">
+      <camera name="realsense">
+        <horizontal_fov>1.487021</horizontal_fov>
+        <image>
+          <width>1280</width>
+          <height>720</height>
+        </image>
+        <!-- <clip>
+          <near>0.1</near>
+          <far>100</far>
+        </clip> -->
+        <!-- <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.100</stddev>
+        </noise> -->
+      </camera>
+      <always_on>1</always_on>
+      <update_rate>90</update_rate>
+      <visualize>0</visualize>
+    </sensor>
+  </gazebo>
+
+  <gazebo>
+    <plugin name="realsense_plugin" filename="librealsense_gazebo_plugin.so">
+      <depthUpdateRate>60.0</depthUpdateRate>
+      <colorUpdateRate>60.0</colorUpdateRate>
+      <infraredUpdateRate>60.0</infraredUpdateRate>
+      <depthTopicName>depth/image_raw</depthTopicName>
+      <depthCameraInfoTopicName>depth/camera_info</depthCameraInfoTopicName>
+      <colorTopicName>color/image_raw</colorTopicName>
+      <colorCameraInfoTopicName>color/camera_info</colorCameraInfoTopicName>
+      <infrared1TopicName>infra1/image_raw</infrared1TopicName>
+      <infrared1CameraInfoTopicName>infra1/camera_info</infrared1CameraInfoTopicName>
+      <infrared2TopicName>infra2/image_raw</infrared2TopicName>
+      <infrared2CameraInfoTopicName>infra2/camera_info</infrared2CameraInfoTopicName>
+      <colorOpticalframeName>camera_color_optical_frame</colorOpticalframeName>
+      <depthOpticalframeName>camera_depth_optical_frame</depthOpticalframeName>
+      <infrared1OpticalframeName>camera_infra1_optical_frame</infrared1OpticalframeName>
+      <infrared2OpticalframeName>camera_infra2_optical_frame</infrared2OpticalframeName>
+      <rangeMinDepth>0.2</rangeMinDepth>
+      <rangeMaxDepth>10.0</rangeMaxDepth>
+      <pointCloud>true</pointCloud>
+      <pointCloudTopicName>depth/points</pointCloudTopicName>
+      <pointCloudCutoff>0.2</pointCloudCutoff>
+    </plugin>
+  </gazebo>
 </robot>
