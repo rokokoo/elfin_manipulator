@@ -21,3 +21,7 @@
 [submodule "realsense_gazebo_plugin"]
 	path = realsense_gazebo_plugin
 	url = https://github.com/pal-robotics/realsense_gazebo_plugin.git
+[submodule "moveit_grasps"]
+	path = moveit_grasps
+	url = https://github.com/ros-planning/moveit_grasps.git
+	branch = melodic-devel
