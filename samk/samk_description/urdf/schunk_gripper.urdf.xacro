@@ -44,19 +44,19 @@
 					<color rgba="1 0 0 1" />
 				</material>
 			</visual>
-			<collision>
+			<!-- <collision>
 				<origin xyz="0 0 0" rpy="0 0 0" />
 				<geometry>
 					<mesh filename="package://samk_description/meshes/finger1_link.STL" />
 				</geometry>
-			</collision>
+			</collision> -->
 		</link>
 		<joint name="finger1_joint" type="prismatic">
 			<origin xyz="0 0 0" rpy="0 0 0" />
 			<parent link="schunk_gripper" />
 			<child link="finger1_link" />
 			<axis xyz="1 0 0" />
-			<limit lower="-0.001" upper="0.006" effort="35" velocity="0.02" />
+			<limit lower="-0.006" upper="0.006" effort="35" velocity="0.02" />
 		</joint>
 		<link name="finger2_link">
 			<inertial>
@@ -73,19 +73,19 @@
 					<color rgba="0 1 1 1" />
 				</material>
 			</visual>
-			<collision>
+			<!-- <collision>
 				<origin xyz="0 0 0" rpy="0 0 0" />
 				<geometry>
 					<mesh filename="package://samk_description/meshes/finger2_link.STL" />
 				</geometry>
-			</collision>
+			</collision> -->
 		</link>
 		<joint name="finger2_joint" type="prismatic">
 			<origin xyz="0 0 0" rpy="0 0 0" />
 			<parent link="schunk_gripper" />
 			<child link="finger2_link" />
 			<axis xyz="-1 0 0" />
-			<limit lower="-0.001" upper="0.006" effort="35" velocity="0.02" />
+			<limit lower="-0.006" upper="0.006" effort="35" velocity="0.02" />
 			<mimic joint="finger1_joint" multiplier="1" offset="0" />
 		</joint>
 
@@ -119,10 +119,24 @@
 
 		<gazebo reference="finger1_link">
 			<material>Gazebo/Red</material>
+			<mu1>1.0</mu1>
+			<mu2>1.0</mu2>
 		</gazebo>
 
 		<gazebo reference="finger2_link">
 			<material>Gazebo/Turquoise</material>
+			<mu1>1.0</mu1>
+			<mu2>1.0</mu2>
 		</gazebo>
+
+		<link name="gripper_eef">
+		</link>
+		<joint name="gripper_eef_joint" type="fixed">
+			<parent link="schunk_gripper"/>
+			<child link="gripper_eef"/>
+			<origin xyz="0.0 0.0 0.160" rpy="0.0 0.0 0.0"/>
+		</joint>
+
 	</xacro:macro>
+
 </robot>
