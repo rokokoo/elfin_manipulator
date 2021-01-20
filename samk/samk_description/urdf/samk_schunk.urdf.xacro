@@ -4,10 +4,7 @@
   <xacro:include filename="$(find elfin_description)/urdf/elfin5.urdf.xacro" />
 
   <!-- SCHUNK GRIPPER-->
-  
-  
   <xacro:include filename="$(find samk_description)/urdf/schunk_gripper.urdf.xacro"/>
-  <!-- <xacro:gripper parent="elfin_end_link" /> -->
   <xacro:gripper parent="elfin_end_link" />
 
   <!-- Realsense -->

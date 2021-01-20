@@ -57,6 +57,7 @@
 			<child link="finger1_link" />
 			<axis xyz="1 0 0" />
 			<limit lower="-0.006" upper="0.006" effort="35" velocity="0.02" />
+			<dynamics damping="1" friction="0.02" />
 		</joint>
 		<link name="finger2_link">
 			<inertial>
