@@ -3,15 +3,17 @@
   <!-- ELFIN ROBOT -->
   <xacro:include filename="$(find elfin_description)/urdf/elfin5.urdf.xacro" />
 
+  <xacro:include filename="$(find samk_description)/urdf/calibration_target.xacro" />
+  <xacro:calibration_target  xyz="-1 0 0.5" rpy="0 0 ${pi}" connected_to="world" />
+
   <!-- SCHUNK GRIPPER-->
   <xacro:include filename="$(find samk_description)/urdf/schunk_gripper.urdf.xacro"/>
   <xacro:gripper parent="elfin_end_link" />
 
   <!-- Realsense -->
-  <xacro:arg name="use_nominal_extrinsics" default="false" />
   <xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro"/>
 
-  <xacro:sensor_d435i parent="schunk_gripper" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
+  <xacro:sensor_d435i parent="schunk_gripper" use_nominal_extrinsics="true" name="camera">
     <origin xyz="0 -0.05 0.0195" rpy="0 ${-pi/2} ${pi/2}"/>
   </xacro:sensor_d435i>
 
