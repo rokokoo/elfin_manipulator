@@ -3,9 +3,12 @@
   <!-- ELFIN ROBOT -->
   <xacro:include filename="$(find elfin_description)/urdf/elfin5.urdf.xacro" />
 
-  <xacro:include filename="$(find samk_description)/urdf/calibration_target.xacro" />
-  <xacro:calibration_target  xyz="-1 0 0.5" rpy="0 0 ${pi}" connected_to="world" />
-
+  <!-- CALIBRATION SQUARE -->
+  <xacro:arg name="cal_square" default="false" />
+  <xacro:if value="$(arg cal_square)">
+    <xacro:include filename="$(find samk_description)/urdf/calibration_target.xacro" />
+    <xacro:calibration_target  xyz="-1 0 0.5" rpy="0 0 ${pi}" connected_to="world" />
+  </xacro:if>
   <!-- SCHUNK GRIPPER-->
   <xacro:include filename="$(find samk_description)/urdf/schunk_gripper.urdf.xacro"/>
   <xacro:gripper parent="elfin_end_link" />
