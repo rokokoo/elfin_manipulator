@@ -1,4 +1,0 @@
-<?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="samk_no_tool">
-	<xacro:include filename="$(find elfin_description)/urdf/elfin5.urdf.xacro" />
-</robot>
