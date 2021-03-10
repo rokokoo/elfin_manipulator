@@ -48,3 +48,11 @@ When the launch file finishes loading, you can start planning and executing move
 ## How to create a arm + manipulator combo
 
 You can find a simple MoveIt tutorial [here](doc/create_moveit_config.md), that explains how to create a simple arm + manipulator pair, how to setup it to work with MoveIt trajectory and getting it to work in Gazebo.
+
+## How to pull and run the Docker image
+
+To download the image, run this command:
+`docker pull ghcr.io/rokokoo/elfin_manipulator:1.0`
+
+To use the image, run 
+`docker run -it ghcr.io/rokokoo/elfin_manipulator:1.0`, but to get a graphical user-interface, you need to use [Rocker](https://github.com/osrf/rocker)
