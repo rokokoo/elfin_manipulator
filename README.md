@@ -52,10 +52,13 @@ You can find a simple MoveIt tutorial [here](doc/create_moveit_config.md), that 
 ## How to pull and run the Docker image
 
 To download the image, run this command:
+
 `docker pull ghcr.io/rokokoo/elfin_manipulator:1.0`
 
 To use the image, run 
+
 `docker run -it ghcr.io/rokokoo/elfin_manipulator:1.0`, but to get a graphical user-interface, you need to use [Rocker](https://github.com/osrf/rocker)
 
 To use the image with Rocker, run
+
 `rocker --nvidia --x11 --mode interactive ghcr.io/rokokoo/elfin_manipulator:1.0`
