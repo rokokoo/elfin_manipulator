@@ -56,3 +56,6 @@ To download the image, run this command:
 
 To use the image, run 
 `docker run -it ghcr.io/rokokoo/elfin_manipulator:1.0`, but to get a graphical user-interface, you need to use [Rocker](https://github.com/osrf/rocker)
+
+To use the image with Rocker, run
+`rocker --nvidia --x11 --mode interactive ghcr.io/rokokoo/elfin_manipulator:1.0`
