@@ -15,6 +15,7 @@ RUN git clone --recurse-submodules https://github.com/rokokoo/elfin_manipulator.
 RUN apt-get -qq update && \
 	apt-get -qq install -y \
 	ros-melodic-moveit-simple-controller-manager \
+	ros-melodic-ros-controllers \
 	python-catkin-tools	\ 
 	&& \
 	rosdep update && \
