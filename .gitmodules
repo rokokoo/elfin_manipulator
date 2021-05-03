@@ -2,10 +2,6 @@
 	path = elfin_robot
 	url = https://github.com/hans-robot/elfin_robot.git
 	branch = melodic
-[submodule "robotiq"]
-	path = robotiq
-	url = https://github.com/rokokoo/robotiq.git
-	branch = kinetic-devel
 [submodule "roboticsgroup_gazebo_plugins"]
 	path = roboticsgroup_gazebo_plugins
 	url = https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git
