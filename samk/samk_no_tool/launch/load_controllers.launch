@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
+    joint_state_controller
+    elfin_arm_controller
+    --timeout 20" />
+</launch>
