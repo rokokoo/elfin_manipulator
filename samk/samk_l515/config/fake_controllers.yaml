@@ -1,0 +1,19 @@
+controller_list:
+  - name: fake_elfin_arm_controller
+    type: $(arg execution_type)
+    joints:
+      - elfin_joint1
+      - elfin_joint2
+      - elfin_joint3
+      - elfin_joint4
+      - elfin_joint5
+      - elfin_joint6
+  - name: fake_schunk_gripper_controller
+    type: $(arg execution_type)
+    joints:
+      - finger1_joint
+initial:  # Define initial robot poses.
+  - group: elfin_arm
+    pose: all_zero
+  - group: schunk_gripper
+    pose: open_gripper

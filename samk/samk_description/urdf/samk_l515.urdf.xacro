@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="samk_l515">
+  <!-- ELFIN ROBOT -->
+  <xacro:include filename="$(find elfin_description)/urdf/elfin5.urdf.xacro" />
+
+  <!-- SCHUNK GRIPPER-->
+  <xacro:include filename="$(find samk_description)/urdf/schunk_gripper.urdf.xacro"/>
+  <xacro:gripper parent="elfin_end_link" />
+
+  <!-- Realsense -->
+  <xacro:include filename="$(find realsense2_description)/urdf/_l515.urdf.xacro"/>
+
+  <xacro:sensor_l515 parent="schunk_gripper" use_nominal_extrinsics="true" name="camera">
+    <!-- <origin xyz="0 -0.05 0.0195" rpy="0 ${-pi/2} ${pi/2}"/> -->
+    <origin xyz="0.0301 -0.078 0.023" rpy="0 ${-pi/2} 0"/>
+  </xacro:sensor_l515>
+
+  <gazebo reference="camera_link">
+    <sensor name="depth" type="depth">
+      <camera name="realsense">
+        <horizontal_fov>1.221730476</horizontal_fov>
+        <image>
+          <width>1280</width>
+          <height>720</height>
+        </image>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.100</stddev>
+        </noise>
+        <clip>
+          <near>0.2</near>
+          <far>10.0</far>
+        </clip>
+      </camera>
+      <always_on>1</always_on>
+      <update_rate>90</update_rate>
+      <visualize>0</visualize>
+      <plugin name="depth_controller" filename="libgazebo_ros_openni_kinect.so">
+        <baseline>0.2</baseline>
+        <alwaysOn>true</alwaysOn>
+        <updateRate>1</updateRate>
+        <cameraName>camera_ir</cameraName>
+        <depthTopicName>depth/image_raw</depthTopicName>
+        <depthCameraInfoTopicName>depth/camera_info</depthCameraInfoTopicName>
+        <imageTopicName>color/image_raw</imageTopicName>
+        <colorCameraInfoTopicName>color/camera_info</colorCameraInfoTopicName>
+        <pointCloudTopicName>depth/points</pointCloudTopicName>
+        <frameName>camera_depth_optical_frame</frameName>
+        <pointCloudCutoff>0.2</pointCloudCutoff>
+        <pointCloudCutoffMax>10.0</pointCloudCutoffMax>
+        <distortionK1>0.00000001</distortionK1>
+        <distortionK2>0.00000001</distortionK2>
+        <distortionK3>0.00000001</distortionK3>
+        <distortionT1>0.00000001</distortionT1>
+        <distortionT2>0.00000001</distortionT2>
+        <CxPrime>0</CxPrime>
+        <Cx>0</Cx>
+        <Cy>0</Cy>
+        <focalLength>0</focalLength>
+        <hackBaseline>0</hackBaseline>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+
+  <!-- <gazebo>
+    <plugin name="realsense_plugin" filename="librealsense_gazebo_plugin.so">
+      <depthUpdateRate>30.0</depthUpdateRate>
+      <colorUpdateRate>30.0</colorUpdateRate>
+      <infraredUpdateRate>30.0</infraredUpdateRate>
+      <depthTopicName>depth/image_raw</depthTopicName>
+      <depthCameraInfoTopicName>depth/camera_info</depthCameraInfoTopicName>
+      <colorTopicName>color/image_raw</colorTopicName>
+      <colorCameraInfoTopicName>color/camera_info</colorCameraInfoTopicName>
+      <infrared1TopicName>infra1/image_raw</infrared1TopicName>
+      <infrared1CameraInfoTopicName>infra1/camera_info</infrared1CameraInfoTopicName>
+      <colorOpticalframeName>camera_color_optical_frame</colorOpticalframeName>
+      <depthOpticalframeName>camera_depth_optical_frame</depthOpticalframeName>
+      <infrared1OpticalframeName>camera_infra_optical_frame</infrared1OpticalframeName>
+      <rangeMinDepth>0.2</rangeMinDepth>
+      <rangeMaxDepth>10.0</rangeMaxDepth>
+      <pointCloud>true</pointCloud>
+      <pointCloudTopicName>depth/points</pointCloudTopicName>
+      <pointCloudCutoff>0.2</pointCloudCutoff>
+    </plugin>
+  </gazebo> -->
+</robot>

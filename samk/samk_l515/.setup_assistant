@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: samk_description
+    relative_path: urdf/samk_l515.urdf.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/samk_l515.srdf
+  CONFIG:
+    author_name: Hannu Henttinen
+    author_email: hannu.2.henttinen@samk.fi
+    generated_timestamp: 1620803893
