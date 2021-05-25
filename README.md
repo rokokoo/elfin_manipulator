@@ -62,3 +62,7 @@ To use the image, run
 To use the image with Rocker, run
 
 `rocker --nvidia --x11 --mode interactive ghcr.io/rokokoo/elfin_manipulator:latest`
+
+## Why Rocker?
+
+Docker is normaly used to run background and command-line programs, that don't have a GUI. So running Rocker, that is developed by Open Source Robotics Foundation (OSRF), gives predefined commands to forward X socket into the container and other convenient options to run GUIs from Docker.

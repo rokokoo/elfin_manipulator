@@ -10,9 +10,10 @@
   <!-- Realsense -->
   <xacro:include filename="$(find realsense2_description)/urdf/_l515.urdf.xacro"/>
 
-  <xacro:sensor_l515 parent="schunk_gripper" use_nominal_extrinsics="true" name="camera">
+  <!-- <xacro:sensor_l515 parent="schunk_gripper" use_nominal_extrinsics="true" name="camera"> -->
+  <xacro:sensor_l515 parent="world" use_nominal_extrinsics="true" name="camera">
     <!-- <origin xyz="0 -0.05 0.0195" rpy="0 ${-pi/2} ${pi/2}"/> -->
-    <origin xyz="0.0301 -0.078 0.023" rpy="0 ${-pi/2} 0"/>
+    <origin xyz="1.5 0 1.5" rpy="1.57 0 3.71"/>
   </xacro:sensor_l515>
 
   <gazebo reference="camera_link">
