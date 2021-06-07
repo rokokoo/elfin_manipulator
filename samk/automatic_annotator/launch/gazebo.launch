@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="paused" default="false"/>
+  <arg name="gazebo_gui" default="true"/>
+  <arg name="urdf_path" default="$(find automatic_annotator)/urdf/samk_l515.urdf.xacro"/>
+
+  <!-- startup simulated world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" default="worlds/empty.world"/>
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="gui" value="$(arg gazebo_gui)"/>
+    <arg name="extra_gazebo_args" value="-s libgazebo_world_plugin_loader.so"/>
+  </include>
+
+  <!-- send robot urdf to param server -->
+  <param name="robot_description" command="$(find xacro)/xacro '$(arg urdf_path)'" />
+
+  <!-- push robot_description to factory and spawn robot in gazebo at the origin, change x,y,z arguments to spawn in a different position -->
+  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot -x 0 -y 0 -z 0"
+    respawn="false" output="screen" />
+
+  <include file="$(find samk_l515)/launch/ros_controllers.launch"/>
+
+  <!-- Plugin for model dimensions -->
+  <rosparam ns="gazebo_state_plugins" file="$(find gazebo_state_plugins)/config/WorldPlugins.yaml"/>
+	<rosparam ns="gazebo_state_plugins" file="$(find gazebo_state_plugins)/config/GazeboObjectInfo.yaml"/>
+	<rosparam ns="gazebo_state_plugins" file="$(find gazebo_state_plugins)/config/GazeboMapPublisher.yaml"/>
+	<arg name="gazebo_world_file" default="worlds/empty.world"/>
+	<arg name="load_gazebo_objects_plugin" default="true"/>
+	<arg name="load_world_plugins" default="true"/>
+
+  <!-- RVIZ -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find automatic_annotator)/launch/scene.rviz" required="true" />
+
+  <node pkg="tf" type="static_transform_publisher" name="world_to_camera" args="2.5 0 2.5 3.14 1 0 world camera_frame 60" />
+  <!-- <node pkg="tf" type="static_transform_publisher" name="camera_offset" args="0.012 0 0.02115 0 0 0 camera_frame camera_offset 60" /> -->
+
+  <node name="model_tf_broadcast" pkg="automatic_annotator" type="model_publisher.py" respawn="false" output="log"/>
+</launch>

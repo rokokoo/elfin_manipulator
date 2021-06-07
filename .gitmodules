@@ -21,3 +21,9 @@
 	path = moveit_grasps
 	url = https://github.com/ros-planning/moveit_grasps.git
 	branch = melodic-devel
+[submodule "general-message-pkgs"]
+	path = general-message-pkgs
+	url = https://github.com/JenniferBuehler/general-message-pkgs
+[submodule "gazebo-pkgs"]
+	path = gazebo-pkgs
+	url = https://github.com/JenniferBuehler/gazebo-pkgs
