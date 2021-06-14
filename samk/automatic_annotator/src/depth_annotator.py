@@ -80,18 +80,20 @@ def p3d_to_p2d_bb(p3d_bb):
 
 def capture(point,count):
     # msg = rospy.wait_for_message("/camera_ir/color/image_raw", Image)
-    msg = rospy.wait_for_message("/realsense_plugin/color/image_raw", Image)
+    msg = rospy.wait_for_message("/realsense_plugin/depth/image_raw", Image)
 
     try:
-        cv2_img = bridge.imgmsg_to_cv2(msg, "bgr8")
+        cv2_img = bridge.imgmsg_to_cv2(msg, "16UC1")
     except CvBridgeError as e:
         print(e)
     else:
+        cv2.normalize(cv2_img, cv2_img, 0, 65534, cv2.NORM_MINMAX)
         cv2.imwrite('dataset/camera_image'+ str(count)+'.png', cv2_img)
         path = 'dataset/'
         im = Image2.open("dataset/camera_image"+str(count)+".png")
         im_data = np.asarray(im)
-        image = Image2.fromarray(im_data, 'RGB')
+        image = Image2.fromarray(im_data, 'I')
+
         img_draw = ImageDraw.Draw(image)  
         for uv in point:
             img_draw.point(uv,fill=0)
@@ -138,7 +140,7 @@ if __name__ == '__main__':
     state_msg = ModelState()
     camera_model = image_geometry.PinholeCameraModel()
     # camera_model.fromCameraInfo(rospy.wait_for_message('/camera_ir/camera_info', CameraInfo))
-    camera_model.fromCameraInfo(rospy.wait_for_message('/realsense_plugin/color/camera_info', CameraInfo))
+    camera_model.fromCameraInfo(rospy.wait_for_message('/realsense_plugin/depth/camera_info', CameraInfo))
 
     tf_buffer = tf2_ros.Buffer()
     listener = tf2_ros.TransformListener(tf_buffer)
@@ -189,5 +191,4 @@ if __name__ == '__main__':
             point_list.append(camera_model.project3dToPixel((-world_to_sensor.position.y,-world_to_sensor.position.z,world_to_sensor.position.x)))
         capture(point_list,count)
         print(count)
-        print(model_info('robot'))
         rospy.sleep(0.3)

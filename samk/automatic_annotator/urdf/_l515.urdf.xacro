@@ -13,7 +13,7 @@ aluminum peripherial evaluation case.
   <xacro:include filename="$(find realsense2_description)/urdf/_materials.urdf.xacro" />
   <xacro:include filename="$(find realsense2_description)/urdf/_usb_plug.urdf.xacro" /> <!-- this specific plug does not apply to L515 -->
 
-  <xacro:macro name="sensor_l515" params="parent *origin name:=camera use_nominal_extrinsics:=false visible:=true">
+  <xacro:macro name="sensor_l515" params="parent *origin name:=camera use_nominal_extrinsics:=false">
     <xacro:arg name="add_plug" default="false" />
     <xacro:property name="M_PI" value="3.1415926535897931" />
 
@@ -54,21 +54,18 @@ aluminum peripherial evaluation case.
     <link name="${name}_bottom_screw_frame"/>
 
     <joint name="${name}_link_joint" type="fixed">
-      <origin xyz="0 0 0" rpy="0 0 0"/> <!-- origin set to 0 0 0 for annotation -->
+      <origin xyz="${l515_cam_depth_px} ${l515_cam_depth_py} ${l515_cam_depth_pz}" rpy="0 0 0"/>
       <parent link="${name}_bottom_screw_frame"/>
       <child link="${name}_link" />
     </joint>
 
     <link name="${name}_link">
-
       <visual>
         <!-- the mesh origin is in the middle of the front plate -->
         <origin xyz="${l515_zero_depth_to_glass} 0 ${-l515_cam_center_to_depth_pz}" rpy="${M_PI/2} 0 ${M_PI/2}"/>
-    <xacro:if value="${visible}">
         <geometry>
 	        <mesh filename="package://realsense2_description/meshes/l515.dae" />
         </geometry>
-      </xacro:if>
       </visual>
       <collision>
         <origin xyz="${-l515_cam_depth_px+l515_cam_mount_from_glass_offset-l515_cam_depth/2} 0 ${-l515_cam_center_to_depth_pz}" rpy="${M_PI/2} 0 ${M_PI/2}"/>
@@ -83,7 +80,6 @@ aluminum peripherial evaluation case.
         <origin xyz="0 0 0" />
         <inertia ixx="0.000044" ixy="0.0" ixz="0.0" iyy="0.000027" iyz="0.0" izz="0.000027" />
       </inertial>
-
     </link>
 
     <joint name="${name}_lower_mount_joint" type="fixed">
@@ -152,124 +148,5 @@ aluminum peripherial evaluation case.
         <origin xyz="${l515_cam_mount_from_glass_offset-0.0148} -0.018 0.018" rpy="${M_PI/4} 0 0 "/>
       </xacro:usb_plug>
     </xacro:if>
-
-<gazebo reference="${name}_link">
-    <self_collide>0</self_collide>
-    <enable_wind>0</enable_wind>
-    <kinematic>0</kinematic>
-    <gravity>1</gravity>
-
-    <mu2>1</mu2>
-    <fdir1>0 0 0</fdir1>
-
-    <kp>1e+13</kp>
-    <kd>1</kd>
-
-    <sensor name="${name}_color" type="camera">
-      <camera name="realsense_${name}">
-        <horizontal_fov>1.211259</horizontal_fov>
-        <image>
-          <width>1920</width>
-          <height>1080</height>
-          <format>RGB_INT8</format>
-        </image>
-        <clip>
-          <near>0.1</near>
-          <far>100</far>
-        </clip>
-        <noise>
-          <type>gaussian</type>
-          <mean>0.0</mean>
-          <stddev>0.007</stddev>
-        </noise>
-      </camera>
-      <always_on>1</always_on>
-      <update_rate>30</update_rate>
-      <visualize>0</visualize>
-    </sensor>
-    <sensor name="${name}_ired1" type="camera">
-      <camera name="realsense_${name}">
-        <horizontal_fov>1.487021</horizontal_fov>
-        <image>
-          <width>1280</width>
-          <height>720</height>
-          <format>L_INT8</format>
-        </image>
-
-        <noise>
-          <type>gaussian</type>
-          <mean>0.0</mean>
-          <stddev>0.05</stddev>
-        </noise>
-      </camera>
-      <always_on>1</always_on>
-      <update_rate>90</update_rate>
-      <visualize>0</visualize>
-    </sensor>
-    <sensor name="${name}_ired2" type="camera">
-      <camera name="realsense_${name}">
-        <horizontal_fov>1.487021</horizontal_fov>
-        <image>
-          <width>1280</width>
-          <height>720</height>
-          <format>L_INT8</format>
-        </image>
-
-        <noise>
-          <type>gaussian</type>
-          <mean>0.0</mean>
-          <stddev>0.05</stddev>
-        </noise>
-      </camera>
-      <always_on>1</always_on>
-      <update_rate>90</update_rate>
-      <visualize>0</visualize>
-    </sensor>
-    <sensor name="${name}_depth" type="depth">
-      <camera name="realsense_${name}">
-        <horizontal_fov>1.487021</horizontal_fov>
-        <image>
-          <width>1024</width>
-          <height>768</height>
-        </image>
-
-        <noise>
-          <type>gaussian</type>
-          <mean>0.0</mean>
-          <stddev>0.100</stddev>
-        </noise>
-      </camera>
-      <always_on>1</always_on>
-      <update_rate>90</update_rate>
-      <visualize>0</visualize>
-    </sensor>
-  </gazebo>
-
-  <gazebo>
-    <plugin name="${name}_realsense_plugin" filename="librealsense_gazebo_plugin.so">
-      <depthUpdateRate>6.0</depthUpdateRate>
-      <colorUpdateRate>6.0</colorUpdateRate>
-      <infraredUpdateRate>6.0</infraredUpdateRate>
-      <depthTopicName>${name}_depth/image_raw</depthTopicName>
-      <depthCameraInfoTopicName>${name}_depth/camera_info</depthCameraInfoTopicName>
-      <colorTopicName>${name}_color/image_raw</colorTopicName>
-      <colorCameraInfoTopicName>${name}_color/camera_info</colorCameraInfoTopicName>
-      <infrared1TopicName>${name}_infra1/image_raw</infrared1TopicName>
-      <infrared1CameraInfoTopicName>${name}_infra1/camera_info</infrared1CameraInfoTopicName>
-      <infrared2TopicName>${name}_infra2/image_raw</infrared2TopicName>
-      <infrared2CameraInfoTopicName>${name}_infra2/camera_info</infrared2CameraInfoTopicName>
-      <colorOpticalframeName>${name}_camera_color_optical_frame</colorOpticalframeName>
-      <depthOpticalframeName>${name}_camera_depth_optical_frame</depthOpticalframeName>
-      <infrared1OpticalframeName>${name}_camera_infra1_optical_frame</infrared1OpticalframeName>
-      <infrared2OpticalframeName>${name}_camera_infra2_optical_frame</infrared2OpticalframeName>
-      <rangeMinDepth>0.2</rangeMinDepth>
-      <rangeMaxDepth>10.0</rangeMaxDepth>
-      <pointCloud>true</pointCloud>
-      <pointCloudTopicName>${name}_depth/points</pointCloudTopicName>
-      <pointCloudCutoff>0.2</pointCloudCutoff>
-      <prefix>${name}_</prefix>
-    </plugin>
-  </gazebo>
   </xacro:macro>
-
 </robot>
