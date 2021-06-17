@@ -68,7 +68,7 @@ aluminum peripherial evaluation case.
         <geometry>
 	        <mesh filename="package://realsense2_description/meshes/l515.dae" />
         </geometry>
-      </xacro:if>
+    </xacro:if>
       </visual>
       <collision>
         <origin xyz="${-l515_cam_depth_px+l515_cam_mount_from_glass_offset-l515_cam_depth/2} 0 ${-l515_cam_center_to_depth_pz}" rpy="${M_PI/2} 0 ${M_PI/2}"/>
@@ -246,7 +246,7 @@ aluminum peripherial evaluation case.
   </gazebo>
 
   <gazebo>
-    <plugin name="${name}_realsense_plugin" filename="librealsense_gazebo_plugin.so">
+    <plugin name="realsense_plugin" filename="librealsense_gazebo_plugin.so">
       <depthUpdateRate>6.0</depthUpdateRate>
       <colorUpdateRate>6.0</colorUpdateRate>
       <infraredUpdateRate>6.0</infraredUpdateRate>

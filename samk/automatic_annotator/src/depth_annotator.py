@@ -1,5 +1,6 @@
 #! /usr/bin/python3
 
+from geometry_msgs import msg
 import rospy, tf
 from gazebo_msgs.srv import DeleteModel, SpawnModel, GetLinkState
 from geometry_msgs.msg import *
@@ -44,10 +45,10 @@ def model_info(model):
             dimX = dimensions[0]
             dimY = dimensions[1]
             dimZ = dimensions[2]
-            # print(
-            #     "Type: %s\nDim X: %f\nDim Y: %f\nDim Z: %f"
-            #     % (typeMsg, dimX, dimY, dimZ)
-            # )
+            print(
+                "Type: %s\nDim X: %f\nDim Y: %f\nDim Z: %f"
+                % (typeMsg, dimX, dimY, dimZ)
+            )
             return np.array([dimX,dimY,dimZ])
         else:
             print("Model not found")
@@ -55,10 +56,11 @@ def model_info(model):
         print("Service call failed: %s" % e)
 
 
-def create_bb_points(size):
-    size[0] = size[0]/2
-    size[1] = size[1]/2
-    size[2] = size[2]/2
+def create_bb_points(sizes):
+    size = np.zeros((3))
+    size[0] = sizes[0]/2
+    size[1] = sizes[1]/2
+    size[2] = sizes[2]/2
     cords = np.zeros((8, 3))
     cords[0, :] = np.array([size[0], size[1], -size[2]])
     cords[1, :] = np.array([-size[0], size[1], -size[2]])
@@ -79,11 +81,9 @@ def p3d_to_p2d_bb(p3d_bb):
     return p2d_bb
 
 def capture(point,count):
-    # msg = rospy.wait_for_message("/camera_ir/color/image_raw", Image)
-    msg = rospy.wait_for_message("/realsense_plugin/depth/image_raw", Image)
-
+    msg = rospy.wait_for_message("/realsense_plugin/camera_depth/image_raw", Image)
     try:
-        cv2_img = bridge.imgmsg_to_cv2(msg, "16UC1")
+        cv2_img = bridge.imgmsg_to_cv2(msg, "passthrough")
     except CvBridgeError as e:
         print(e)
     else:
@@ -93,15 +93,12 @@ def capture(point,count):
         im = Image2.open("dataset/camera_image"+str(count)+".png")
         im_data = np.asarray(im)
         image = Image2.fromarray(im_data, 'I')
-
         img_draw = ImageDraw.Draw(image)  
         for uv in point:
             img_draw.point(uv,fill=0)
         filename = path + '%06d.png' % count
-
         if not os.path.exists(os.path.dirname(filename)):
             os.makedirs(os.path.dirname(filename))
-    
         uv_array = np.array(point)
         box = p3d_to_p2d_bb(uv_array)
         datastr = ''
@@ -120,12 +117,63 @@ def transform_pose(input_pose, from_frame, to_frame):
     pose_stamped.header.frame_id = from_frame
     pose_stamped.header.stamp = rospy.Time(0)
     try:
-        #x = tf_broadcast(model_pose,from_frame)
-        output_pose_stamped = tf_buffer.transform(pose_stamped, to_frame, rospy.Duration(1))  #tf_buffer.lookup_transform(from_frame,to_frame,rospy.Duration(1)))
+        output_pose_stamped = tf_buffer.transform(pose_stamped, to_frame, rospy.Duration(1))  
         return output_pose_stamped.pose
-
     except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
         raise
+
+def point_distance(p1_coords,p2_coords):
+    p1 = np.array([p1_coords[0], p1_coords[1], p1_coords[2]])
+    p2 = np.array([p2_coords[0], p2_coords[1], p2_coords[2]])
+    squared_dist = np.sum((p1-p2)**2, axis=0)
+    return np.sqrt(squared_dist)
+
+def create_posestamped(xyz, rpy):
+    msg = tf2_geometry_msgs.PoseStamped()
+    orient = tf.transformations.quaternion_from_euler(rpy[0],rpy[1],rpy[2])
+    msg.pose.orientation.x = orient[0]
+    msg.pose.orientation.y = orient[1]
+    msg.pose.orientation.z = orient[2]
+    msg.pose.orientation.w = orient[3]
+    msg.pose.position.x = xyz[0]
+    msg.pose.position.y = xyz[1]
+    msg.pose.position.z = xyz[2]
+    return msg
+
+def side_points(sizes, from_frame, to_frame, r_p_y, camera_coords):
+    size = np.zeros((3))
+    size[0] = sizes[0]/2
+    size[1] = sizes[1]/2
+    size[2] = sizes[2]/2
+    cords = np.zeros((6, 3))
+    cords[0, :] = np.array([size[0], 0, 0])
+    cords[1, :] = np.array([-size[0], 0, 0])
+    cords[2, :] = np.array([0, size[1], 0])
+    cords[3, :] = np.array([0, -size[1], 0])
+    cords[4, :] = np.array([0, 0, size[2]])
+    cords[5, :] = np.array([0, 0, -size[2]])
+    cords_offset = np.zeros((6, 3))
+    cords_offset[0, :] = np.array([size[0]+0.0001, 0, 0])
+    cords_offset[1, :] = np.array([-size[0]-0.0001, 0, 0])
+    cords_offset[2, :] = np.array([0, size[1]+0.0001, 0])
+    cords_offset[3, :] = np.array([0, -size[1]-0.0001, 0])
+    cords_offset[4, :] = np.array([0, 0, size[2]+0.0001])
+    cords_offset[5, :] = np.array([0, 0, -size[2]-0.0001])
+    count = 0
+    for real, offset in zip(cords, cords_offset):
+        center_pose = create_posestamped(real,r_p_y)
+        offset_pose = create_posestamped(offset,r_p_y)
+        real_pose_tf = transform_pose(center_pose, from_frame, to_frame)
+        offset_pose_tf = transform_pose(offset_pose, from_frame, to_frame)
+        real_dist = point_distance(camera_coords,[real_pose_tf.position.x,real_pose_tf.position.y,real_pose_tf.position.z])
+        offset_dist = point_distance(camera_coords,[offset_pose_tf.position.x,offset_pose_tf.position.y,offset_pose_tf.position.z])
+        if real_dist > offset_dist:
+            print(real, offset)
+            print(count)
+        count += 1
+    
+
+
 
 bridge = CvBridge()
 
@@ -139,8 +187,7 @@ if __name__ == '__main__':
     set_state = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
     state_msg = ModelState()
     camera_model = image_geometry.PinholeCameraModel()
-    # camera_model.fromCameraInfo(rospy.wait_for_message('/camera_ir/camera_info', CameraInfo))
-    camera_model.fromCameraInfo(rospy.wait_for_message('/realsense_plugin/depth/camera_info', CameraInfo))
+    camera_model.fromCameraInfo(rospy.wait_for_message('/realsense_plugin/camera_depth/camera_info', CameraInfo))
 
     tf_buffer = tf2_ros.Buffer()
     listener = tf2_ros.TransformListener(tf_buffer)
@@ -163,32 +210,28 @@ if __name__ == '__main__':
     count = 0
     while count < 100:
         count = count + 1
-        corner_pose = tf2_geometry_msgs.PoseStamped()
-        state_msg.pose.position.x = 0 + count/10
-        state_msg.pose.position.y = 0 + count/10
+        state_msg.pose.position.x = 1
+        state_msg.pose.position.y = 1
         state_msg.pose.position.z = 0
-        orient2 = tf.transformations.quaternion_from_euler(0,0,1)
+        r_p_y = [0,0,0]
+        orient2 = tf.transformations.quaternion_from_euler(r_p_y[0],r_p_y[1],r_p_y[2],)
         state_msg.pose.orientation.x = orient2[0]
         state_msg.pose.orientation.y = orient2[1]
         state_msg.pose.orientation.z = orient2[2]
         state_msg.pose.orientation.w = orient2[3]
-        corner_pose.pose.orientation.x =  orient2[0]
-        corner_pose.pose.orientation.y =  orient2[1]
-        corner_pose.pose.orientation.z =  orient2[2]
-        corner_pose.pose.orientation.w =  orient2[3]
         set_state(state_msg)
         rospy.sleep(0.3)
         model_sizes = model_info(model_name)
         bbox_points = create_bb_points(model_sizes)
         point_list = []
+        side_points(model_sizes,model_name,'world',r_p_y,[1.5,0,1.5])
+        
         for bbox_corner in bbox_points:
+            corner_pose = create_posestamped(bbox_corner,r_p_y)
 
-            corner_pose.pose.position.x = 0 + bbox_corner[0]
-            corner_pose.pose.position.y = 0 + bbox_corner[1]
-            corner_pose.pose.position.z = 0 + bbox_corner[2]
-            world_to_sensor = transform_pose(corner_pose, model_name, 'camera_frame')
-            # world_to_sensor = transform_pose(corner_pose, model_name, 'camera_offset')
-            point_list.append(camera_model.project3dToPixel((-world_to_sensor.position.y,-world_to_sensor.position.z,world_to_sensor.position.x)))
+            model_to_sensor = transform_pose(corner_pose, model_name, 'camera_frame')
+            # model_to_world = transform_pose(corner_pose, model_name, 'world')
+            point_list.append(camera_model.project3dToPixel((-model_to_sensor.position.y,-model_to_sensor.position.z,model_to_sensor.position.x)))
         capture(point_list,count)
         print(count)
         rospy.sleep(0.3)

@@ -18,6 +18,7 @@
   <!-- push robot_description to factory and spawn robot in gazebo at the origin, change x,y,z arguments to spawn in a different position -->
   <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot -x 0 -y 0 -z 0"
     respawn="false" output="screen" />
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" />
 
   <!-- <include file="$(find samk_l515)/launch/ros_controllers.launch"/> -->
 
@@ -35,7 +36,7 @@
   <node pkg="tf" type="static_transform_publisher" name="world_to_camera" args="1.5 0 1.5 3.14 1 0 world camera_frame 60" />
   <!-- <node pkg="tf" type="static_transform_publisher" name="camera_offset" args="0.012 0 0.02115 0 0 0 camera_frame camera_offset 60" /> -->
   <!-- <node pkg="tf" type="static_transform_publisher" name="l515_depth_transform" args="1.5 0 1.5 1.57 0 3.71 world camera_depth_optical_frame 60" /> -->
-  <node pkg="tf" type="static_transform_publisher" name="l515_depth_transform" args="1.5 0 1.5 3.14 1 0  world camera_depth_optical_frame 60" />
+  <node pkg="tf" type="static_transform_publisher" name="l515_depth_transform" args="1.5 0 1.5 3.14 1 0  world camera_camera_depth_optical_frame 60" />
 
   <node name="model_tf_broadcast" pkg="automatic_annotator" type="model_publisher.py" respawn="false" output="log"/>
 </launch>
