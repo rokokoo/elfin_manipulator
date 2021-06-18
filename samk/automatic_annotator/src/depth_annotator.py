@@ -159,6 +159,7 @@ def side_points(sizes, from_frame, to_frame, r_p_y, camera_coords):
     cords_offset[3, :] = np.array([0, -size[1]-0.0001, 0])
     cords_offset[4, :] = np.array([0, 0, size[2]+0.0001])
     cords_offset[5, :] = np.array([0, 0, -size[2]-0.0001])
+    used_sides = [False,False,False,False,False,False] #0=+x 1=-x 2=+y 3=-y 4=+z 5=-z
     count = 0
     for real, offset in zip(cords, cords_offset):
         center_pose = create_posestamped(real,r_p_y)
@@ -168,12 +169,48 @@ def side_points(sizes, from_frame, to_frame, r_p_y, camera_coords):
         real_dist = point_distance(camera_coords,[real_pose_tf.position.x,real_pose_tf.position.y,real_pose_tf.position.z])
         offset_dist = point_distance(camera_coords,[offset_pose_tf.position.x,offset_pose_tf.position.y,offset_pose_tf.position.z])
         if real_dist > offset_dist:
-            print(real, offset)
+            used_sides[count] = True
             print(count)
         count += 1
-    
+    sidecheck = np.zeros((3,9,3))
+    if used_sides[0]:
+        sidecheck[0,0:9,0] = size[0]
+        sidecheck[0,[0,1,2],2] = size[2]/2
+        sidecheck[0,[6,7,8],2] = -size[2]/2 
+        sidecheck[0,[0,3,6],1] = size[1]/2
+        sidecheck[0,[2,5,8],1] = -size[1]/2 
+    if used_sides[1]:
+        sidecheck[0,0:9,0] = -size[0]
+        sidecheck[0,[0,1,2],2] = size[2]/2
+        sidecheck[0,[6,7,8],2] = -size[2]/2 
+        sidecheck[0,[0,3,6],1] = size[1]/2
+        sidecheck[0,[2,5,8],1] = -size[1]/2 
+    if used_sides[2]:
+        sidecheck[1,0:9,1] = size[1]
+        sidecheck[1,[0,1,2],2] = size[2]/2
+        sidecheck[1,[6,7,8],2] = -size[2]/2 
+        sidecheck[1,[0,3,6],0] = size[0]/2
+        sidecheck[1,[2,5,8],0] = -size[0]/2
+    if used_sides[3]:
+        sidecheck[1,0:9,1] = -size[1]
+        sidecheck[1,[0,1,2],2] = size[2]/2
+        sidecheck[1,[6,7,8],2] = -size[2]/2 
+        sidecheck[1,[0,3,6],0] = size[0]/2
+        sidecheck[1,[2,5,8],0] = -size[0]/2
+    if used_sides[4]:
+        sidecheck[2,0:9,2] = size[2]
+        sidecheck[2,[0,1,2],0] = size[0]/2
+        sidecheck[2,[6,7,8],0] = -size[0]/2 
+        sidecheck[2,[0,3,6],1] = size[1]/2
+        sidecheck[2,[2,5,8],1] = -size[1]/2
+    if used_sides[5]:
+        sidecheck[2,0:9,2] = -size[2]
+        sidecheck[2,[0,1,2],0] = size[0]/2
+        sidecheck[2,[6,7,8],0] = -size[0]/2 
+        sidecheck[2,[0,3,6],1] = size[1]/2
+        sidecheck[2,[2,5,8],1] = -size[1]/2
 
-
+    return sidecheck
 
 bridge = CvBridge()
 
@@ -210,8 +247,8 @@ if __name__ == '__main__':
     count = 0
     while count < 100:
         count = count + 1
-        state_msg.pose.position.x = 1
-        state_msg.pose.position.y = 1
+        state_msg.pose.position.x = 0.2 + count/10
+        state_msg.pose.position.y = 0.3
         state_msg.pose.position.z = 0
         r_p_y = [0,0,0]
         orient2 = tf.transformations.quaternion_from_euler(r_p_y[0],r_p_y[1],r_p_y[2],)
