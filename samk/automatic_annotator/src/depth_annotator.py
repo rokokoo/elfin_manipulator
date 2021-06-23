@@ -254,7 +254,7 @@ class NewCamera(AnnotatorCamera):
     def get_image(self):
         msg = rospy.wait_for_message('/realsense_plugin/'+self.camera_name+'_depth/image_raw', Image)
         try:
-            cv2_img = bridge.imgmsg_to_cv2(msg, "CV_16UC1")
+            cv2_img = bridge.imgmsg_to_cv2(msg, "passthrough")
         except CvBridgeError as e:
             print(e)
         else:
