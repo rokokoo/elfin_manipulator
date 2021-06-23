@@ -33,8 +33,8 @@ while not rospy.is_shutdown():
       model_coordinates = rospy.ServiceProxy('/gazebo/get_model_state', GetModelState)
       response = model_coordinates('model_1','world')
       callback(response,'model_1')
-      response = model_coordinates('model_2','world')
-      callback(response,'model_2')
+      # response = model_coordinates('model_2','world')
+      # callback(response,'model_2')
       r.sleep()
    except:
       pass
