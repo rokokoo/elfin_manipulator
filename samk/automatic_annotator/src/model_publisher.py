@@ -13,7 +13,7 @@ r = rospy.Rate(60) # 10hz
 
 br = tf2_ros.TransformBroadcaster()
 t = geometry_msgs.msg.TransformStamped()
-def callback(msg,name):
+def pose_publisher(msg,name):
    t.header.stamp = rospy.Time.now()
    t.header.frame_id = "world"
    t.child_frame_id = name
@@ -32,9 +32,9 @@ while not rospy.is_shutdown():
    try:
       model_coordinates = rospy.ServiceProxy('/gazebo/get_model_state', GetModelState)
       response = model_coordinates('model_1','world')
-      callback(response,'model_1')
-      # response = model_coordinates('model_2','world')
-      # callback(response,'model_2')
+      pose_publisher(response,'model_1')
+      response = model_coordinates('model_2','world')
+      pose_publisher(response,'model_2')
       r.sleep()
    except:
       pass

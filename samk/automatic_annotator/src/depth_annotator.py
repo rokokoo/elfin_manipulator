@@ -24,6 +24,11 @@ from gazebo_msgs.msg import ModelState
 from gazebo_msgs.srv import SetModelState
 import itertools
 import pyrealsense2 as rs
+from sensor_msgs.msg import PointCloud2
+import pcl_ros
+import sensor_msgs.point_cloud2 as pc2
+
+
 
 def model_info(model):
     rospy.wait_for_service("/gazebo_objects/get_info")
@@ -206,13 +211,15 @@ def side_points(sizes, from_frame, to_frame, r_p_y, camera_coords):
     return sidecheck
 
 
-class AnnotatorCamera:
-    def __init__(self,):
+
+
+class AnnotatorCamera():
+    def __init__(self):
         self.spawn_model = rospy.ServiceProxy('gazebo/spawn_sdf_model', SpawnModel)
         self.set_state = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
         self.model_name = []
         self.model_sizes = []
-        self.model_rpy = []
+        self.model_rpy = [] #model_rpy and xyz don't have real use atm
         self.model_xyz = []
         self.model_class_num = []
         self.initial_pose = [0,0,0]
@@ -232,6 +239,8 @@ class AnnotatorCamera:
         state_msg = make_state_msg(xyz,rpy,model_name)
         self.set_state(state_msg)
 
+    def print_all(self):
+        print()
 
 class NewCamera(AnnotatorCamera):
     def __init__(self, camera_name, camera_coords):
@@ -239,7 +248,14 @@ class NewCamera(AnnotatorCamera):
         self.camera_name = camera_name
         self.camera_coords = camera_coords
         self.camera_model = image_geometry.PinholeCameraModel()
-        self.camera_model.fromCameraInfo(rospy.wait_for_message('/realsense_plugin/'+camera_name+'_depth/camera_info', CameraInfo))
+        self.camera_model.fromCameraInfo(rospy.wait_for_message('/realsense_plugin/'+self.camera_name+'_depth/camera_info', CameraInfo))
+
+    def distance_to_camera(self,pixel,cv2_img):
+        depth = cv2_img[int(pixel[1])][int(pixel[0])]/1000
+        ray = self.camera_model.projectPixelTo3dRay((pixel[0],pixel[1]))  # get 3d ray of unit length through desired pixel
+        ray_z = [el / ray[2] for el in ray]
+        pt = [el * depth for el in ray_z]
+        return point_distance([0,0,0],pt)
 
     def model_corner_points(self, model_name,model_sizes,camera_name,rpy):
         bbox_points = create_bb_points(model_sizes)
@@ -253,14 +269,13 @@ class NewCamera(AnnotatorCamera):
 
     def get_image(self):
         msg = rospy.wait_for_message('/realsense_plugin/'+self.camera_name+'_depth/image_raw', Image)
+        # pc_msg = rospy.wait_for_message('/realsense_plugin/'+self.camera_name+'_depth/points', PointCloud2)
         try:
             cv2_img = bridge.imgmsg_to_cv2(msg, "passthrough")
         except CvBridgeError as e:
             print(e)
         else:
-            print(msg)
             count = 0
-            print(cv2_img)
             new_image = cv2.normalize(cv2_img, None, 0, 65535, cv2.NORM_MINMAX)
             path = 'dataset/'+self.camera_name
             while os.path.exists(path+'_image'+ str(count)+'.png'):
@@ -269,54 +284,57 @@ class NewCamera(AnnotatorCamera):
             model_points = []
             index = 0
             occlusion = []
-
-            im = Image2.open("dataset/camera_image0.png")
+            occlusion_list = []
+            im = Image2.open("dataset/"+self.camera_name+"_image"+str(count)+".png")
             im_data = np.asarray(im)
             image = Image2.fromarray(im_data, 'I')
             img_draw = ImageDraw.Draw(image)
-            print(cv2_img)
-            percentX = 0
-            percentY = 0
-            for bounding_box in self.model_name:
-                helper_points = side_points(self.model_sizes[index],bounding_box,'world',self.model_rpy[index],self.camera_coords)
+
+
+            for model_name in self.model_name:
+                helper_points = side_points(self.model_sizes[index],model_name,'world',self.model_rpy[index],self.camera_coords)
                 for sides in helper_points:
                     occlusion_side = []
                     for occ_points in sides:
                         if np.all(occ_points == 0): continue
                         corner_pose = create_posestamped(occ_points,self.model_rpy[0])
-                        model_to_sensor = transform_pose(corner_pose, 'model_1', 'camera_frame')
-                        model_to_world = transform_pose(corner_pose, 'model_1', 'world')
-                        occlusion_side.append([self.camera_model.project3dToPixel((-model_to_sensor.position.y,-model_to_sensor.position.z,model_to_sensor.position.x)),point_distance(self.camera_coords,[model_to_world.position.x,model_to_world.position.y,model_to_world.position.z,])])
-                        # occlusion_side.append(camera_model.project3dToPixel((-model_to_sensor.position.y,-model_to_sensor.position.z,model_to_sensor.position.x)))
+                        model_to_sensor = transform_pose(corner_pose, model_name, self.camera_name+'_frame')
+                        # model_to_world = transform_pose(corner_pose, model_name, 'world')
+                        # occlusion_side.append([self.camera_model.project3dToPixel((-model_to_sensor.position.y,-model_to_sensor.position.z,model_to_sensor.position.x)),point_distance(self.camera_coords,[model_to_world.position.x,model_to_world.position.y,model_to_world.position.z,])])
+                        occlusion_side.append([self.camera_model.project3dToPixel((-model_to_sensor.position.y,-model_to_sensor.position.z,model_to_sensor.position.x)),point_distance([0,0,0],[model_to_sensor.position.x,model_to_sensor.position.y,model_to_sensor.position.z,])])
                     occlusion.append(occlusion_side)
                 for uv_dist in occlusion:
                     for uv in uv_dist:
-                        print(uv)
-                        print(cv2_img[int(uv[0][1]),int(uv[0][0])],math.trunc( uv[1]*1000))
-                        img_draw.point(uv[0],fill=64500)
-                        # print(occlusion)
-                model_points.append([bounding_box,self.model_corner_points(bounding_box,self.model_sizes[index],self.camera_name,self.model_rpy[index])])
+                        # print(cv2_img[int(uv[0][1]),int(uv[0][0])],math.trunc( uv[1]*1000))
+                        # print(self.distance_to_camera(uv[0],cv2_img))
+                        # print("___")
+                        img_draw.point(uv[0],fill=34500)
+                        if uv[0][0] < 0 or uv[0][1] < 0 or uv[0][0] > cv2_img.shape[1] or uv[0][1] > cv2_img.shape[0]: continue
+                        if self.distance_to_camera(uv[0],cv2_img)+0.005 > uv[1]: occlusion_list.append(1)
+
+                if sum(occlusion_list) >= 2: model_points.append([model_name,self.model_corner_points(model_name,self.model_sizes[index],self.camera_name,self.model_rpy[index])])
                 index += 1
+                print(occlusion)
                 occlusion = []
-
-
-            image.save('000.png')
+                print(occlusion_list)
+                occlusion_list = []
+            image.save(self.camera_name+'000.png')
 
             index = 0
             datastr = ''
-            for points in model_points:    
+            for points in model_points:
+                name = self.model_name.index(points[0])
+                #if self.model_class_num[name] == 20: continue
                 uv_array = np.array(points[1])
                 box = p3d_to_p2d_bb(uv_array)
                 uc = ((box[0,0] + box[1,0])/2) / self.camera_model.width
                 vc = ((box[0,1] + box[1,1])/2) / self.camera_model.height
                 w = (box[1,0] - box[0,0]) / self.camera_model.width
                 h = (box[1,1] - box[0,1]) / self.camera_model.height
-                datastr = datastr + f"{self.model_class_num[index]} {uc} {vc} {w} {h} \n"
+                datastr = datastr + f"{self.model_class_num[name]} {uc} {vc} {w} {h} \n"
                 index += 1
-            with open(path + '%06d.txt' % count, 'a') as txt_file:
+            with open(path+'_image'+str(count)+'.txt', 'a') as txt_file:
                 txt_file.write(datastr)
-
-
 
 
 bridge = CvBridge()
@@ -329,11 +347,23 @@ if __name__ == '__main__':
 
     tf_buffer = tf2_ros.Buffer()
     listener = tf2_ros.TransformListener(tf_buffer)
+    # z = AnnotatorCamera()
+    z = NewCamera('camera',[1.5,0,1.5])
+    # b = NewCamera('camera2',[1,0,1.5])
+    # c = NewCamera('camera3',[1.5,0,1.5])
+    # d = NewCamera('camera4',[1.5,0,1.5])
+    # e = NewCamera('camera5',[1.5,0,1.5])
+    # f = NewCamera('camera6',[1.5,0,1.5])
+    # g = NewCamera('camera7',[1.5,0,1.5])
+    # h = NewCamera('camera8',[1.5,0,1.5])
 
-    x = NewCamera('camera',[1.5,0,1.5])
-    x.spawn_new_model("src/elfin_manipulator/samk/automatic_annotator/models/box.urdf","model_1",0)
-    x.new_state([0.5,1,0],[0,0,0],"model_1")
+    z.spawn_new_model("src/elfin_manipulator/samk/automatic_annotator/models/box.urdf","model_1",0)
     rospy.sleep(0.1)
-    # x.spawn_new_model("src/elfin_manipulator/samk/automatic_annotator/models/box.urdf","model_2",0)
-    # x.new_state([0.3,0.2,0],[0,0,0],"model_2")
-    x.get_image()
+    z.new_state([1.4,0.2,0],[0,0,2],"model_1")
+    z.spawn_new_model("src/elfin_manipulator/samk/automatic_annotator/models/box.urdf","model_2",0)
+    rospy.sleep(0.1)
+    z.new_state([0.1,-0.4,0],[0,0,2],"model_2")
+    z.get_image()
+    # a.print_all()
+    # b.get_image()
+    # b.print_all()

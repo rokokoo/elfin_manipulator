@@ -16,7 +16,32 @@
   </xacro:sensor_l515>
 
   <xacro:sensor_l515  parent="world" use_nominal_extrinsics="true" name="camera2" visible="false">
-    <origin xyz="0 0 1.5" rpy="0 0 0"/>
+    <origin xyz="1 0 1.5" rpy="0 1.57 0"/>
   </xacro:sensor_l515>
+
+  <xacro:sensor_l515  parent="world" use_nominal_extrinsics="true" name="camera3" visible="true">
+    <origin xyz="1.5 0.2 1.5" rpy="0 1.57 0"/>
+  </xacro:sensor_l515>
+
+  <xacro:sensor_l515  parent="world" use_nominal_extrinsics="true" name="camera4" visible="true">
+    <origin xyz="1.5 0.2 1.5" rpy="0 1.57 0"/>
+  </xacro:sensor_l515>
+
+  <xacro:sensor_l515  parent="world" use_nominal_extrinsics="true" name="camera5" visible="true">
+    <origin xyz="1.5 0.2 1.5" rpy="0 1.57 0"/>
+  </xacro:sensor_l515>
+
+  <xacro:sensor_l515  parent="world" use_nominal_extrinsics="true" name="camera6" visible="true">
+    <origin xyz="1.5 0.2 1.5" rpy="0 1.57 0"/>
+  </xacro:sensor_l515>
+
+  <xacro:sensor_l515  parent="world" use_nominal_extrinsics="true" name="camera7" visible="true">
+    <origin xyz="1.5 0.2 1.5" rpy="0 1.57 0"/>
+  </xacro:sensor_l515>
+
+  <xacro:sensor_l515  parent="world" use_nominal_extrinsics="true" name="camera8" visible="true">
+    <origin xyz="1.5 0.2 1.5" rpy="0 1.57 0"/>
+  </xacro:sensor_l515>
+
 
 </robot>

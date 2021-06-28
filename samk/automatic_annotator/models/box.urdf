@@ -22,7 +22,9 @@
 			</geometry>
 		</collision>
 	</link>
-
+	<!-- <gazebo>
+		<static>true</static>
+	</gazebo> -->
 	<gazebo reference="base_link">
 		<material>Gazebo/Yellow</material>
 	</gazebo>

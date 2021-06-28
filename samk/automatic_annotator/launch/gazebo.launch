@@ -34,6 +34,14 @@
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find automatic_annotator)/launch/scene.rviz" required="true" />
 
   <node pkg="tf" type="static_transform_publisher" name="world_to_camera" args="1.5 0 1.5 3.14 1 0 world camera_frame 60" />
+  <node pkg="tf" type="static_transform_publisher" name="world_to_camera2" args="1 0 1.5 0 1.57 0 world camera2_frame 60" />
+  <node pkg="tf" type="static_transform_publisher" name="world_to_camera3" args="1.5 0.2 1.5 0 1.57 0 world camera3_frame 60" />
+  <node pkg="tf" type="static_transform_publisher" name="world_to_camera4" args="1.5 0.2 1.5 0 1.57 0 world camera4_frame 60" />
+  <node pkg="tf" type="static_transform_publisher" name="world_to_camera5" args="1.5 0.2 1.5 0 1.57 0 world camera5_frame 60" />
+  <node pkg="tf" type="static_transform_publisher" name="world_to_camera6" args="1.5 0.2 1.5 0 1.57 0 world camera6_frame 60" />
+  <node pkg="tf" type="static_transform_publisher" name="world_to_camera7" args="1.5 0.2 1.5 0 1.57 0 world camera7_frame 60" />
+  <node pkg="tf" type="static_transform_publisher" name="world_to_camera8" args="1.5 0.2 1.5 0 1.57 0 world camera8_frame 60" />
+
   <!-- <node pkg="tf" type="static_transform_publisher" name="camera_offset" args="0.012 0 0.02115 0 0 0 camera_frame camera_offset 60" /> -->
   <!-- <node pkg="tf" type="static_transform_publisher" name="l515_depth_transform" args="1.5 0 1.5 1.57 0 3.71 world camera_depth_optical_frame 60" /> -->
   <node pkg="tf" type="static_transform_publisher" name="l515_depth_transform" args="1.5 0 1.5 3.14 1 0  world camera_camera_depth_optical_frame 60" />
