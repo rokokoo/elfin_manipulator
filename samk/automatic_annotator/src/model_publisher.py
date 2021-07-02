@@ -9,7 +9,7 @@ from gazebo_msgs.srv import GetModelState
 
 #pub = rospy.Publisher('model_frame', geometry_msgs.msg.TransformStamped, queue_size=10)
 rospy.init_node('model_tf')
-r = rospy.Rate(60) # 10hz
+r = rospy.Rate(60) 
 
 br = tf2_ros.TransformBroadcaster()
 t = geometry_msgs.msg.TransformStamped()
@@ -39,10 +39,18 @@ while not rospy.is_shutdown():
       pose_publisher(response,'model_3')
       response = model_coordinates('model_4','world')
       pose_publisher(response,'model_4')
-      response = model_coordinates('model_5','world')
-      pose_publisher(response,'model_5')
+      # response = model_coordinates('model_5','world')
+      # pose_publisher(response,'model_5')
       # response = model_coordinates('model_6','world')
       # pose_publisher(response,'model_6')
+      # response = model_coordinates('model_7','world')
+      # pose_publisher(response,'model_7')
+      # response = model_coordinates('model_8','world')
+      # pose_publisher(response,'model_8')
+      # response = model_coordinates('model_9','world')
+      # pose_publisher(response,'model_9')
+      # response = model_coordinates('model_10','world')
+      # pose_publisher(response,'model_10')
       r.sleep()
    except:
       pass

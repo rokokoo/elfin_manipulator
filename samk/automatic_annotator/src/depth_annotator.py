@@ -17,7 +17,7 @@ from tf.transformations import *
 from object_msgs.srv import ObjectInfo
 from gazebo_msgs.msg import ModelState
 from gazebo_msgs.srv import SetModelState
-
+import random
 
 
 
@@ -29,25 +29,29 @@ def model_info(model):
         if resp.success:
             primitives = resp.object.primitives
             type = primitives[0].type
+            dimensions = primitives[0].dimensions
+
             if type == 1:
                 typeMsg = "Box"
+                dimX = dimensions[0]
+                dimY = dimensions[1]
+                dimZ = dimensions[2]
+                # print("Type: %s\nDim X: %f\nDim Y: %f\nDim Z: %f"%(typeMsg,dimX,dimY,dimZ))
+                return np.array([dimX,dimY,dimZ])
             elif type == 2:
                 typeMsg = "Sphere"
+                dimR = dimensions[0]
+                print("Type: %s\nDim R: %f"%(typeMsg,dimR))
             elif type == 3:
                 typeMsg = "Cylinder"
+                dimH = dimensions[0]
+                dimR = dimensions[1]
+                print("Type: %s\nDim H: %f\nDim R: %f"%(typeMsg,dimH,dimR))
             elif type == 4:
                 typeMsg = "Cone"
+                print("Type: %s"%(typeMsg))
             else:
                 typeMsg = "UNKNOWN"
-            dimensions = primitives[0].dimensions
-            dimX = dimensions[0]
-            dimY = dimensions[1]
-            dimZ = dimensions[2]
-            # print(
-            #     "Type: %s\nDim X: %f\nDim Y: %f\nDim Z: %f"
-            #     % (typeMsg, dimX, dimY, dimZ)
-            # )
-            return np.array([dimX,dimY,dimZ])
         else:
             print("Model not found")
     except rospy.ServiceException as e:
@@ -296,7 +300,7 @@ class NewCamera(AnnotatorCamera):
                     if uv[0][0] < 0 or uv[0][1] < 0 or uv[0][0] > self.cv2_img.shape[1] or uv[0][1] > self.cv2_img.shape[0]: continue
                     if self.distance_to_camera(uv[0],self.cv2_img)+0.005 > uv[1]: occlusion_list.append(1)
 
-            if sum(occlusion_list) >= 3: model_points.append([model_name,self.model_corner_points(model_name,self.model_sizes[name],self.camera_name,self.model_rpy[name])])
+            if sum(occlusion_list) >= 4: model_points.append([model_name,self.model_corner_points(model_name,self.model_sizes[name],self.camera_name,self.model_rpy[name])])
             # print(occlusion)
             occlusion = []
             # print(occlusion_list)
@@ -357,7 +361,15 @@ if __name__ == '__main__':
     z.spawn_new_model("src/elfin_manipulator/samk/automatic_annotator/models/box.urdf","model_2",0)
     z.spawn_new_model("src/elfin_manipulator/samk/automatic_annotator/models/box.urdf","model_3",0)
     z.spawn_new_model("src/elfin_manipulator/samk/automatic_annotator/models/box.urdf","model_4",0)
-    z.spawn_object("src/elfin_manipulator/samk/automatic_annotator/models/cylinder.urdf","model_5")
+    # z.spawn_new_model("src/elfin_manipulator/samk/automatic_annotator/models/ball.urdf","model_5",1) # changes needed for objects with less than 3 dimensions
+
+    z.spawn_object("src/elfin_manipulator/samk/automatic_annotator/models/ball.urdf","model_5")
+    z.spawn_object("src/elfin_manipulator/samk/automatic_annotator/models/cylinder.urdf","model_6")
+    z.spawn_object("src/elfin_manipulator/samk/automatic_annotator/models/plate.urdf","model_7")
+    z.spawn_object("src/elfin_manipulator/samk/automatic_annotator/models/big_ball.urdf","model_8")
+    z.spawn_object("src/elfin_manipulator/samk/automatic_annotator/models/drc_practice_2x4/model.sdf","model_9")
+    z.spawn_object("src/elfin_manipulator/samk/automatic_annotator/models/coke_can/model.sdf","model_10")
+    z.spawn_object("src/elfin_manipulator/samk/automatic_annotator/models/rectangle.urdf","model_11")
 
 
     a = z.add_camera('camera',[1.5,0,1.5])
@@ -370,20 +382,27 @@ if __name__ == '__main__':
     h=z.add_camera('camera8',[2.5, 0, 0.5])
     i=z.add_camera('camera9',[0, -0.3, 1.7])
     j=z.add_camera('camera10',[-1, 1, 0.7])
-    z.new_state([0.1,0.8,0],[2,0,2],"model_1")
-    z.new_state([0.1,-0.8,0],[3,0,1],"model_2")
-    z.new_state([1,0.8,0],[1,0,3],"model_3")
-    z.new_state([1,-0.8,0],[0,2,0],"model_4")
-    z.new_state([1,0.4,0],[0,2,0],"model_5")
+    for x in range(100000):
+        z.new_state([random.uniform(-0.8, 0.8) for i in range(3)],[random.uniform(0, 3) for i in range(3)],"model_1")
+        z.new_state([random.uniform(-0.8, 0.8) for i in range(3)],[random.uniform(0, 3) for i in range(3)],"model_2")
+        z.new_state([random.uniform(-0.8, 0.8) for i in range(3)],[random.uniform(0, 3) for i in range(3)],"model_3")
+        z.new_state([random.uniform(-0.8, 0.8) for i in range(3)],[random.uniform(0, 3) for i in range(3)],"model_4")
+        z.new_state([random.uniform(-0.8, 0.8) for i in range(3)],[random.uniform(0, 3) for i in range(3)],"model_5")
+        z.new_state([random.uniform(-0.8, 0.8) for i in range(3)],[random.uniform(0, 3) for i in range(3)],"model_6")
+        z.new_state([random.uniform(-0.8, 0.8) for i in range(3)],[random.uniform(0, 3) for i in range(3)],"model_7")
+        z.new_state([random.uniform(-0.8, 0.8) for i in range(3)],[random.uniform(0, 3) for i in range(3)],"model_8")
+        z.new_state([random.uniform(-0.8, 0.8) for i in range(3)],[random.uniform(0, 3) for i in range(3)],"model_9")
+        z.new_state([random.uniform(-0.8, 0.8) for i in range(3)],[random.uniform(0, 3) for i in range(3)],"model_10")
+        z.new_state([random.uniform(-0.8, 0.8) for i in range(3)],[random.uniform(0, 3) for i in range(3)],"model_11")
 
-    rospy.sleep(0.3)
-    a.get_image()
-    b.get_image()
-    c.get_image()
-    d.get_image()
-    e.get_image()
-    f.get_image()
-    g.get_image()
-    h.get_image()
-    i.get_image()
-    j.get_image()
+        rospy.sleep(0.3)
+        a.get_image()
+        b.get_image()
+        c.get_image()
+        d.get_image()
+        e.get_image()
+        f.get_image()
+        g.get_image()
+        h.get_image()
+        i.get_image()
+        j.get_image()

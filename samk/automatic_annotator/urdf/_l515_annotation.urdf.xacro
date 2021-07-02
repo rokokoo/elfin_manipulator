@@ -247,9 +247,9 @@ aluminum peripherial evaluation case.
 
   <gazebo>
     <plugin name="realsense_plugin" filename="librealsense_gazebo_plugin.so">
-      <depthUpdateRate>6.0</depthUpdateRate>
-      <colorUpdateRate>6.0</colorUpdateRate>
-      <infraredUpdateRate>6.0</infraredUpdateRate>
+      <depthUpdateRate>60.0</depthUpdateRate>
+      <colorUpdateRate>60.0</colorUpdateRate>
+      <infraredUpdateRate>60.0</infraredUpdateRate>
       <depthTopicName>${name}_depth/image_raw</depthTopicName>
       <depthCameraInfoTopicName>${name}_depth/camera_info</depthCameraInfoTopicName>
       <colorTopicName>${name}_color/image_raw</colorTopicName>
