@@ -35,6 +35,14 @@ while not rospy.is_shutdown():
       pose_publisher(response,'model_1')
       response = model_coordinates('model_2','world')
       pose_publisher(response,'model_2')
+      response = model_coordinates('model_3','world')
+      pose_publisher(response,'model_3')
+      response = model_coordinates('model_4','world')
+      pose_publisher(response,'model_4')
+      response = model_coordinates('model_5','world')
+      pose_publisher(response,'model_5')
+      # response = model_coordinates('model_6','world')
+      # pose_publisher(response,'model_6')
       r.sleep()
    except:
       pass
